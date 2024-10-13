@@ -1,2 +1,4 @@
 *.txt
 ./*t.txt
+*.png
+./*.png

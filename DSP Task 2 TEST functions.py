@@ -51,7 +51,7 @@ def AddSignalSamplesAreEqual(userFirstSignal,userSecondSignal,Your_indices,Your_
 
 indices = [-4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7]
 samples = [-2.0, 3.0, 0.0, 1.0, 7.0, 8.0, 4.0, -2.0, 5.0, 5.0, 3.0, 2.0]
-# AddSignalSamplesAreEqual("Signal1.txt", "Signal2.txt",indices,samples) # call this function with your computed indicies and samples
+AddSignalSamplesAreEqual("Signal1.txt", "Signal2.txt",indices,samples) # call this function with your computed indicies and samples
 
 
 # %%
@@ -79,7 +79,7 @@ def SubSignalSamplesAreEqual(userFirstSignal,userSecondSignal,Your_indices,Your_
 
 indices = [-4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7]
 samples = [-2.0, 1.0, 0.0, 3.0, 1.0, 4.0, 2.0, 4.0, -7.0, -11.0, -3.0, 2.0]
-# SubSignalSamplesAreEqual("Signal1.txt", "Signal2.txt",indices,samples)  # call this function with your computed indicies and samples
+SubSignalSamplesAreEqual("Signal1.txt", "Signal2.txt",indices,samples)  # call this function with your computed indicies and samples
 
 
 # %%
@@ -107,7 +107,7 @@ def MultiplySignalByConst(User_Const,Your_indices,Your_samples):
 
 indices = [-4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7]
 samples = [-10.0, 10.0, 0.0, 10.0, 20.0, 30.0, 15.0, 5.0, -5.0, -15.0, 0.0, 10.0]
-# MultiplySignalByConst(5,indices, samples)# call this function with your computed indicies and samples
+MultiplySignalByConst(5,indices, samples)# call this function with your computed indicies and samples
 
 
 # %%
@@ -135,10 +135,13 @@ def ShiftSignalByConst(Shift_value,Your_indices,Your_samples):
             return
     print("Shift by "+str(Shift_value)+" Test case passed successfully")
 
+indices = [-7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4]
+samples = [-2.0, 2.0, 0.0, 2.0, 4.0, 6.0, 3.0, 1.0, -1.0, -3.0, 0.0, 2.0]
+ShiftSignalByConst(3,indices,samples)  # call this function with your computed indicies and samples
+
 indices = [-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 samples = [-2.0, 2.0, 0.0, 2.0, 4.0, 6.0, 3.0, 1.0, -1.0, -3.0, 0.0, 2.0]
-# samples = [1.0, 5.0, 3.0, 5.0, 7.0, 9.0, 6.0, 4.0, 2.0, 0.0, 3.0, 5.0]
-# ShiftSignalByConst(-3,indices,samples)  # call this function with your computed indicies and samples
+ShiftSignalByConst(-3,indices,samples)  # call this function with your computed indicies and samples
 
 # %%
 
