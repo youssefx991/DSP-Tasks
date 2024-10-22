@@ -1,7 +1,18 @@
 #!/usr/bin/env python
 # coding: utf-8
 # %%
-from Task01.Task01 import *
+
+import sys
+import os
+
+# Add the parent directory to sys.path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+# Now you can import Task01
+from Task01 import *
+
+# make sure the cwd is 'DSP-Tasks\Task01\Task 1 testcases and testing functions'
+print('Current Working directory:', os.getcwd())
+
 
 # %%
 
