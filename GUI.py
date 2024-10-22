@@ -110,7 +110,7 @@ class DSPApp:
         if indices and samples: # There exists a current used signal
             self.signal_one_display_text.delete(1.0, tk.END)
             self.signal_one_display_text.insert(tk.END, f"Indices: {indices}\nSamples: {samples}\n")
-            display_signal(indices, samples)
+            # display_signal(indices, samples)
         else:
             messagebox.showerror("ERROR in Displaying Signal 1 text- Passed Signal to display text is not valid")
             
@@ -118,7 +118,7 @@ class DSPApp:
         if indices and samples: # There exists a current used signal
             self.signal_two_display_text.delete(1.0, tk.END)
             self.signal_two_display_text.insert(tk.END, f"Indices: {indices}\nSamples: {samples}\n")
-            display_signal(indices, samples)
+            # display_signal(indices, samples)
         else:
             messagebox.showerror("ERROR in Displaying Signal 2 text- Passed Signal to display text is not valid")
 
@@ -126,7 +126,7 @@ class DSPApp:
         if indices and samples: # There exists a current used signal
             self.signal_result_display_text.delete(1.0, tk.END)
             self.signal_result_display_text.insert(tk.END, f"Indices: {self.current_indices_result}\nSamples: {self.current_samples_result}\n")
-            display_signal(self.current_indices_result, self.current_samples_result)
+            # display_signal(self.current_indices_result, self.current_samples_result)
         else:
             messagebox.showerror("ERROR in Displaying Signal result text- Passed Signal to display text is not valid")
 
@@ -136,7 +136,7 @@ class DSPApp:
             self.signal_one_display_text.delete(1.0, tk.END) # clear text from previous signal data
             self.signal_one_display_text.insert(tk.END, self.current_indices_one)   # fill it with cirrent signal data
             self.signal_one_display_text.insert(tk.END, self.current_samples_one)   # fill it with cirrent signal data
-            display_signal(self.current_indices_one, self.current_samples_one)
+            # display_signal(self.current_indices_one, self.current_samples_one)
 
             # Create a new window for the plot
             plot_window = tk.Toplevel(self.root)
@@ -162,7 +162,7 @@ class DSPApp:
             self.signal_two_display_text.delete(1.0, tk.END) # clear text from previous signal data
             self.signal_two_display_text.insert(tk.END, self.current_indices_two)   # fill it with cirrent signal data
             self.signal_two_display_text.insert(tk.END, self.current_samples_two)   # fill it with cirrent signal data
-            display_signal(self.current_indices_two, self.current_samples_two)
+            # display_signal(self.current_indices_two, self.current_samples_two)
 
             # Create a new window for the plot
             plot_window = tk.Toplevel(self.root)
@@ -188,7 +188,7 @@ class DSPApp:
             self.signal_result_display_text.delete(1.0, tk.END) # clear text from previous signal data
             self.signal_result_display_text.insert(tk.END, self.current_indices_result)   # fill it with cirrent signal data
             self.signal_result_display_text.insert(tk.END, self.current_samples_result)   # fill it with cirrent signal data
-            display_signal(self.current_indices_result, self.current_samples_result)
+            # display_signal(self.current_indices_result, self.current_samples_result)
 
             # Create a new window for the plot
             plot_window = tk.Toplevel(self.root)
