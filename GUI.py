@@ -70,27 +70,53 @@ class DSPApp:
         self.canvas = None
 
 
-    def display_plot(self, signal, time, mode:int):
+    def display_plot(self, signal, time, signal_disc, n, mode:int):
         # Create a new window for the plot
         plot_window = tk.Toplevel(self.root)
         plot_window.title("Signal Plot")
 
-        figure, axis = plt.subplots()
+        # Create a new figure for the plot
+        figure, axis = plt.subplots(2, 1, figsize=(10, 8))  # 1 column for single plot, 2 columns for dual plots
+        
+        # Check the mode to determine the plotting behavior
         if mode == 1:
-            axis.plot(time, signal, color='green')
+            # Only the continuous signal
+            axis[0].plot(time, signal, color='green')
+            axis[0].set_title("Continuous Signal")
+            axis[0].set_xlabel("Time (s)")
+            axis[0].set_ylabel("Amplitude")
+            axis[0].grid(True)
+            
+            # Hide the second axis for a single plot
+            axis[1].axis('off')
+
         elif mode == 2:
-            # axis.stem(time, signal)
-            plt.scatter(time, signal, color='red')
+            # Only the discrete signal
+            axis[0].scatter(n, signal_disc, color='red')
+            axis[0].set_title("Discrete Signal")
+            axis[0].set_xlabel("Index")
+            axis[0].set_ylabel("Value")
+            axis[0].grid(True)
+
+            # Hide the second axis for a single plot
+            axis[1].axis('off')
+
         else:
-            axis.plot(time, signal, color='green')
-            # axis.stem(time, signal)
-            plt.scatter(time, signal, color='red')
+            # Both continuous and discrete signals
+            axis[0].plot(time, signal, color='green')
+            axis[0].set_title("Continuous Signal")
+            axis[0].set_xlabel("Time (s)")
+            axis[0].set_ylabel("Amplitude")
+            axis[0].grid(True)
 
+            axis[1].scatter(n, signal_disc, color='red')
+            axis[1].set_title("Discrete Signal")
+            axis[1].set_xlabel("Index")
+            axis[1].set_ylabel("Value")
+            axis[1].grid(True)
 
-        axis.set_title("Signal Plot")
-        axis.set_xlabel("Index")
-        axis.set_ylabel("Value")
-        axis.grid(True)
+        # Adjust layout
+        plt.tight_layout()
 
         # Create a canvas for the figure
         canvas = FigureCanvasTkAgg(figure, master=plot_window)
@@ -99,24 +125,24 @@ class DSPApp:
 
     def display_cont(self):
         # messagebox._show(message=f"in display_cont {self.display_opt.get()}")
-        signal, time = self.generate_signal()
+        signal, time, signal_disc, n = self.generate_signal()
         print(signal)
         print(time)
-        self.display_plot(signal, time, 1)
+        self.display_plot(signal, time, signal_disc, n, 1)
 
     def display_Disc(self):
         # messagebox._show(message=f"in display_Disc {self.display_opt.get()}")   
-        signal, time = self.generate_signal()
+        signal, time, signal_disc, n = self.generate_signal()
         print(signal)
         print(time)
-        self.display_plot(signal, time, 2)
+        self.display_plot(signal, time, signal_disc, n, 2)
 
     def display_both(self):
         # messagebox._show(message=f"in display_both {self.display_opt.get()}")
-        signal, time = self.generate_signal()
+        signal, time, signal_disc, n = self.generate_signal()
         print(signal)
         print(time)
-        self.display_plot(signal, time, 3)
+        self.display_plot(signal, time, signal_disc, n, 3)
         
     def generate_signal(self):
         # amplitude * cos(2*pi*F*t + phase shift)
@@ -124,19 +150,26 @@ class DSPApp:
         phase_shift = float(self.phase_shift_txb.get())
         freq = float(self.frequency_txb.get())
         fs = float(self.fs_txb.get())
-        t = np.arange(0, 1, 1/fs)
 
+        t = np.linspace(0, 1, 1000)
+
+        samples_per_second = int(fs) # nuber of samples per second
+        n = np.arange(samples_per_second) # creates an array from 0 -> samples_per_second - 1 
+        t_disc = n / fs # normailze the values of x-axis to be from 0 to 1 like t
+        
         if fs < 2*freq:
             messagebox.showerror(message="fs < f, this will cause aliasing")
 
         if self.display_opt.get() == "Sin":
             print("Sin")
             signal = amp * np.sin(2*np.pi*freq*t + phase_shift)
+            signal_disc = amp * np.sin(2 * np.pi * freq * (n/fs) + phase_shift)
         elif self.display_opt.get() == "Cos":
             print("Cos")
             signal = amp * np.cos(2*np.pi*freq*t + phase_shift)
+            signal_disc = amp * np.cos(2 * np.pi * freq * (n/fs) + phase_shift)
 
-        return signal, t
+        return signal, t, signal_disc, t_disc
         
 
     def create_signal_processing_tab(self, root):
