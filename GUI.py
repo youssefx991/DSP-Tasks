@@ -29,11 +29,12 @@ class DSPApp:
 
     def create_signal_generation_tab(self, root):
 
-        self.display_opt = tk.StringVar()
+        self.display_opt = tk.StringVar(value="Sin")
         self.sin_radio = tk.Radiobutton(root, text="Sin", variable=self.display_opt, value="Sin")
         self.cos_radio = tk.Radiobutton(root, text="Cos", variable=self.display_opt, value="Cos")
         self.sin_radio.pack()
         self.cos_radio.pack()
+        
 
         self.amplitude_lbl = tk.Label(root, text="Amplitude")
         self.amplitude_txb = tk.Entry(root)
