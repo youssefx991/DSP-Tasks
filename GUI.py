@@ -76,44 +76,38 @@ class DSPApp:
         plot_window.title("Signal Plot")
 
         # Create a new figure for the plot
-        figure, axis = plt.subplots(2, 1, figsize=(10, 8))  # 1 column for single plot, 2 columns for dual plots
+        figure, axis = plt.subplots(figsize=(10, 6))  # 1 column for single plot, 2 columns for dual plots
         
         # Check the mode to determine the plotting behavior
         if mode == 1:
             # Only the continuous signal
-            axis[0].plot(time, signal, color='green')
-            axis[0].set_title("Continuous Signal")
-            axis[0].set_xlabel("Time (s)")
-            axis[0].set_ylabel("Amplitude")
-            axis[0].grid(True)
-            
-            # Hide the second axis for a single plot
-            axis[1].axis('off')
+            axis.plot(time, signal, color='green')
+            axis.set_title("Continuous Signal")
+            axis.set_xlabel("Time (s)")
+            axis.set_ylabel("Amplitude")
+            axis.grid(True)
 
         elif mode == 2:
             # Only the discrete signal
-            axis[0].scatter(n, signal_disc, color='red')
-            axis[0].set_title("Discrete Signal")
-            axis[0].set_xlabel("Index")
-            axis[0].set_ylabel("Value")
-            axis[0].grid(True)
-
-            # Hide the second axis for a single plot
-            axis[1].axis('off')
+            axis.scatter(n, signal_disc, color='red')
+            axis.set_title("Discrete Signal")
+            axis.set_xlabel("Index")
+            axis.set_ylabel("Value")
+            axis.grid(True)
 
         else:
             # Both continuous and discrete signals
-            axis[0].plot(time, signal, color='green')
-            axis[0].set_title("Continuous Signal")
-            axis[0].set_xlabel("Time (s)")
-            axis[0].set_ylabel("Amplitude")
-            axis[0].grid(True)
+            axis.plot(time, signal, color='green')
+            axis.set_title("Continuous Signal")
+            axis.set_xlabel("Time (s)")
+            axis.set_ylabel("Amplitude")
+            axis.grid(True)
 
-            axis[1].scatter(n, signal_disc, color='red')
-            axis[1].set_title("Discrete Signal")
-            axis[1].set_xlabel("Index")
-            axis[1].set_ylabel("Value")
-            axis[1].grid(True)
+            axis.scatter(n, signal_disc, color='red')
+            axis.set_title("Discrete Signal")
+            axis.set_xlabel("Index")
+            axis.set_ylabel("Value")
+            axis.grid(True)
 
         # Adjust layout
         plt.tight_layout()
