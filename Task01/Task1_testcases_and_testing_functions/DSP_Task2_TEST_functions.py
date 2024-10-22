@@ -60,10 +60,6 @@ def AddSignalSamplesAreEqual(userFirstSignal,userSecondSignal,Your_indices,Your_
             return
     print("Addition Test case passed successfully")
 
-indices_one , samples_one = ReadSignalFile('Signal1.txt')
-indices_two , samples_two = ReadSignalFile('Signal2.txt')
-indicies, samples = add_signal(indices_one, samples_one, indices_two, samples_two)
-AddSignalSamplesAreEqual("Signal1.txt", "Signal2.txt",indicies,samples) # call this function with your computed indicies and samples
 
 
 # %%
@@ -89,8 +85,7 @@ def SubSignalSamplesAreEqual(userFirstSignal,userSecondSignal,Your_indices,Your_
             return
     print("Subtraction Test case passed successfully")
 
-indicies, samples = subtract_signal(indices_one, samples_one, indices_two, samples_two)
-SubSignalSamplesAreEqual("Signal1.txt", "Signal2.txt",indicies,samples)  # call this function with your computed indicies and samples
+
 
 
 # %%
@@ -116,9 +111,6 @@ def MultiplySignalByConst(User_Const,Your_indices,Your_samples):
             return
     print("Multiply by "+str(User_Const)+" Test case passed successfully")
 
-factor = 5
-indicies, samples = multiply_signal(indices_one, samples_one, factor)
-MultiplySignalByConst(factor, indicies, samples)# call this function with your computed indicies and samples
 
 
 # %%
@@ -146,9 +138,6 @@ def ShiftSignalByConst(Shift_value, Your_indices, Your_samples):
             return
     print("Shift by "+str(Shift_value)+" Test case passed successfully")
 
-shift = 3
-indicies, samples = shift_signal(indices_one, samples_one, shift)
-ShiftSignalByConst(shift,indicies,samples)  # call this function with your computed indicies and samples
 
 # %%
 
@@ -171,7 +160,6 @@ def Folding(Your_indices,Your_samples):
             return
     print("Folding Test case passed successfully")
 
-indicies, samples = reverse_signal(indices_one, samples_one)
-Folding(indicies,samples)  # call this function with your computed indicies and samples
+
 
 # %%

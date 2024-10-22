@@ -1,14 +1,37 @@
 import tkinter as tk
-from tkinter import filedialog, messagebox
+from tkinter import ttk, filedialog, messagebox
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from Task01.Task01 import *
+from Task01.Task1_testcases_and_testing_functions.DSP_Task2_TEST_functions import *
 
 class DSPApp:
     def __init__(self, root):
         self.root = root
         self.root.title("DSP App")
 
+        # Create a notebook (tabs container)
+        self.notebook = ttk.Notebook(root)
+        self.notebook.pack(fill="both", expand=True)
+
+        # Tab 1: Signal Processing Tab
+        self.signal_processing_frame = ttk.Frame(self.notebook)
+        self.notebook.add(self.signal_processing_frame, text="Signal Processing")
+
+        # Tab 2: Future Functionality Tab (extend here)
+        self.signal_generation_frame = ttk.Frame(self.notebook)
+        self.notebook.add(self.signal_generation_frame, text="Signal Generation")
+
+        # Assign functions for creating tabs
+        self.create_signal_processing_tab(self.signal_processing_frame)
+        self.create_signal_generation_tab(self.signal_generation_frame)
+
+    def create_signal_generation_tab(self, root):
+        # Placeholder for future functionality in the new tab
+        placeholder_label = tk.Label(root, text="Future features can be added here.")
+        placeholder_label.pack()
+
+    def create_signal_processing_tab(self, root):
         # Read First Signal Button
         self.read_signal_one_button = tk.Button(root, text="Read Signal 1", command=self.read_signal_one) # button
         self.read_signal_one_button.pack()
@@ -212,6 +235,7 @@ class DSPApp:
         if self.current_indices_one and self.current_samples_one and self.current_indices_two and self.current_samples_two:
             self.current_indices_result, self.current_samples_result = add_signal(self.current_indices_one, self.current_samples_one, self.current_indices_two, self.current_samples_two)
             self.display_signal_result_text(self.current_indices_result, self.current_samples_result)
+            AddSignalSamplesAreEqual("Signal1.txt", "Signal2.txt", self.current_indices_result, self.current_samples_result)
         else:
             messagebox.showerror("ERROR in Adding -- Signals not valid for adding")
 
@@ -219,6 +243,7 @@ class DSPApp:
         if self.current_indices_one and self.current_samples_one and self.current_indices_two and self.current_samples_two:
             self.current_indices_result, self.current_samples_result = subtract_signal(self.current_indices_one, self.current_samples_one, self.current_indices_two, self.current_samples_two)
             self.display_signal_result_text(self.current_indices_result, self.current_samples_result)
+            SubSignalSamplesAreEqual("Signal1.txt", "Signal2.txt", self.current_indices_result, self.current_samples_result)
         else:
             messagebox.showerror("ERROR in subtracting -- Signals not valid for subtracting")
     
@@ -226,17 +251,19 @@ class DSPApp:
         if self.current_indices_one and self.current_samples_one:
             factor = float(self.multiply_signal_entry.get())
             self.current_indices_result = self.current_indices_one
-            self.current_samples_result = multiply_signal(self.current_samples_one, factor)
+            self.current_indices_result, self.current_samples_result = multiply_signal(self.current_indices_one, self.current_samples_one, factor)
             self.display_signal_result_text(self.current_indices_result, self.current_samples_result)
+            MultiplySignalByConst(factor, self.current_indices_result, self.current_samples_result)
         else:
             messagebox.showerror("ERROR in multiplying --- Current Signal not valid for multiplying")
 
     def shift_signal(self):
         if self.current_indices_one and self.current_samples_one:
             shift = int(self.shift_signal_entry.get())
-            self.current_indices_result = shift_signal(self.current_indices_one, shift)
+            self.current_indices_result, self.current_samples_result = shift_signal(self.current_indices_one, self.current_samples_one, shift)
             self.current_samples_result = self.current_samples_one
             self.display_signal_result_text(self.current_indices_result, self.current_samples_result)
+            ShiftSignalByConst(shift, self.current_indices_result, self.current_samples_result)
         else:
             messagebox.showerror("ERROR in shifting --- Current Signal not valid for shift")
 
@@ -244,6 +271,7 @@ class DSPApp:
         if self.current_indices_one and self.current_samples_one:
             self.current_indices_result, self.current_samples_result = reverse_signal(self.current_indices_one, self.current_samples_one)
             self.display_signal_result_text(self.current_indices_result, self.current_samples_result)
+            Folding(self.current_indices_result, self.current_samples_result)
         else:
             messagebox.showerror("ERROR in reversing --- Current Signal not valid for reverse")
 
