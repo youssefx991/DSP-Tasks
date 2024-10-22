@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from Task01.Task01 import *
 from Task01.Task1_testcases_and_testing_functions.DSP_Task2_TEST_functions import *
+import numpy as np
 
 class DSPApp:
     def __init__(self, root):
@@ -27,9 +28,116 @@ class DSPApp:
         self.create_signal_generation_tab(self.signal_generation_frame)
 
     def create_signal_generation_tab(self, root):
-        # Placeholder for future functionality in the new tab
-        placeholder_label = tk.Label(root, text="Future features can be added here.")
-        placeholder_label.pack()
+
+        self.display_opt = tk.StringVar()
+        self.sin_radio = tk.Radiobutton(root, text="Sin", variable=self.display_opt, value="Sin")
+        self.cos_radio = tk.Radiobutton(root, text="Cos", variable=self.display_opt, value="Cos")
+        self.sin_radio.pack()
+        self.cos_radio.pack()
+
+        self.amplitude_lbl = tk.Label(root, text="Amplitude")
+        self.amplitude_txb = tk.Entry(root)
+        self.amplitude_lbl.pack()
+        self.amplitude_txb.pack()
+        self.amplitude_txb.insert(0, "2")
+
+        self.phase_shift_lbl = tk.Label(root, text="Phase shift")
+        self.phase_shift_txb = tk.Entry(root)
+        self.phase_shift_lbl.pack()
+        self.phase_shift_txb.pack()
+        self.phase_shift_txb.insert(0, "0.785")
+
+        self.frequency_lbl = tk.Label(root, text="Frequency")
+        self.frequency_txb = tk.Entry(root)
+        self.frequency_lbl.pack()
+        self.frequency_txb.pack()
+        self.frequency_txb.insert(0, "5")
+
+        self.fs_lbl = tk.Label(root, text="Sampling Frequency")
+        self.fs_txb = tk.Entry(root)
+        self.fs_lbl.pack()
+        self.fs_txb.pack()
+        self.fs_txb.insert(0, "10")
+
+        self.cont_btn = tk.Button(root, text="Display Continious", command=self.display_cont)
+        self.disc_btn = tk.Button(root, text="Display Discrete", command=self.display_Disc)
+        self.both_btn = tk.Button(root, text="Display Both", command=self.display_both)
+        self.cont_btn.pack()
+        self.disc_btn.pack()
+        self.both_btn.pack()
+
+        # Canvas for Matplotlib Figure to show signla plot
+        self.canvas = None
+
+
+    def display_plot(self, signal, time, mode:int):
+        # Create a new window for the plot
+        plot_window = tk.Toplevel(self.root)
+        plot_window.title("Signal Plot")
+
+        figure, axis = plt.subplots()
+        if mode == 1:
+            axis.plot(time, signal, color='green')
+        elif mode == 2:
+            # axis.stem(time, signal)
+            plt.scatter(time, signal, color='red')
+        else:
+            axis.plot(time, signal, color='green')
+            # axis.stem(time, signal)
+            plt.scatter(time, signal, color='red')
+
+
+        axis.set_title("Signal Plot")
+        axis.set_xlabel("Index")
+        axis.set_ylabel("Value")
+        axis.grid(True)
+
+        # Create a canvas for the figure
+        canvas = FigureCanvasTkAgg(figure, master=plot_window)
+        canvas.draw()
+        canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
+
+    def display_cont(self):
+        # messagebox._show(message=f"in display_cont {self.display_opt.get()}")
+        signal, time = self.generate_signal()
+        print(signal)
+        print(time)
+        self.display_plot(signal, time, 1)
+
+    def display_Disc(self):
+        # messagebox._show(message=f"in display_Disc {self.display_opt.get()}")   
+        signal, time = self.generate_signal()
+        print(signal)
+        print(time)
+        self.display_plot(signal, time, 2)
+
+    def display_both(self):
+        # messagebox._show(message=f"in display_both {self.display_opt.get()}")
+        signal, time = self.generate_signal()
+        print(signal)
+        print(time)
+        self.display_plot(signal, time, 3)
+        
+    def generate_signal(self):
+        # amplitude * cos(2*pi*F*t + phase shift)
+        amp = float(self.amplitude_txb.get())
+        phase_shift = float(self.phase_shift_txb.get())
+        freq = float(self.frequency_txb.get())
+        fs = float(self.fs_txb.get())
+        t = np.arange(0, 1, 1/fs)
+
+        if fs < 2*freq:
+            messagebox.showerror(message="fs < f, this will cause aliasing")
+
+        if self.display_opt.get() == "Sin":
+            print("Sin")
+            signal = amp * np.sin(2*np.pi*freq*t + phase_shift)
+        elif self.display_opt.get() == "Cos":
+            print("Cos")
+            signal = amp * np.cos(2*np.pi*freq*t + phase_shift)
+
+        return signal, t
+        
 
     def create_signal_processing_tab(self, root):
         # Read First Signal Button
