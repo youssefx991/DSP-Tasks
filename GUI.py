@@ -3,6 +3,7 @@ from tkinter import ttk, filedialog, messagebox
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from Task01.Task01 import *
+from Task02.task02 import *
 from Task01.Task1_testcases_and_testing_functions.DSP_Task2_TEST_functions import *
 import numpy as np
 
@@ -26,6 +27,9 @@ class DSPApp:
         # Assign functions for creating tabs
         self.create_signal_processing_tab(self.signal_processing_frame)
         self.create_signal_generation_tab(self.signal_generation_frame)
+
+
+    # ====================== Task 02 =================================================================
 
     def create_signal_generation_tab(self, root):
 
@@ -61,7 +65,7 @@ class DSPApp:
         self.fs_txb.insert(0, "10")
 
         self.cont_btn = tk.Button(root, text="Display Continious", command=self.display_cont)
-        self.disc_btn = tk.Button(root, text="Display Discrete", command=self.display_Disc)
+        self.disc_btn = tk.Button(root, text="Display Discrete", command=self.display_disc)
         self.both_btn = tk.Button(root, text="Display Both", command=self.display_both)
         self.cont_btn.pack()
         self.disc_btn.pack()
@@ -70,7 +74,6 @@ class DSPApp:
         # Canvas for Matplotlib Figure to show signla plot
         self.canvas = None
 
-
     def display_plot(self, signal, time, signal_disc, n, mode:int):
         # Create a new window for the plot
         plot_window = tk.Toplevel(self.root)
@@ -78,6 +81,7 @@ class DSPApp:
 
         # Create a new figure for the plot
         figure, axis = plt.subplots(figsize=(10, 6))  # 1 column for single plot, 2 columns for dual plots
+        axis.grid(True)
         
         # Check the mode to determine the plotting behavior
         if mode == 1:
@@ -86,7 +90,6 @@ class DSPApp:
             axis.set_title("Continuous Signal")
             axis.set_xlabel("Time (s)")
             axis.set_ylabel("Amplitude")
-            axis.grid(True)
 
         elif mode == 2:
             # Only the discrete signal
@@ -94,21 +97,14 @@ class DSPApp:
             axis.set_title("Discrete Signal")
             axis.set_xlabel("Index")
             axis.set_ylabel("Value")
-            axis.grid(True)
 
         else:
             # Both continuous and discrete signals
             axis.plot(time, signal, color='green')
-            axis.set_title("Continuous Signal")
-            axis.set_xlabel("Time (s)")
-            axis.set_ylabel("Amplitude")
-            axis.grid(True)
-
             axis.scatter(n, signal_disc, color='red')
-            axis.set_title("Discrete Signal")
-            axis.set_xlabel("Index")
-            axis.set_ylabel("Value")
-            axis.grid(True)
+            axis.set_title("Continuous/Discrete Signal")
+            axis.set_xlabel("Time (s)/Index")
+            axis.set_ylabel("Amplitude/Value")
 
         # Adjust layout
         plt.tight_layout()
@@ -120,52 +116,20 @@ class DSPApp:
 
     def display_cont(self):
         # messagebox._show(message=f"in display_cont {self.display_opt.get()}")
-        signal, time, signal_disc, n = self.generate_signal()
-        print(signal)
-        print(time)
+        signal, time, signal_disc, n = generate_signal(self)
         self.display_plot(signal, time, signal_disc, n, 1)
 
-    def display_Disc(self):
-        # messagebox._show(message=f"in display_Disc {self.display_opt.get()}")   
-        signal, time, signal_disc, n = self.generate_signal()
-        print(signal)
-        print(time)
+    def display_disc(self):
+        # messagebox._show(message=f"in display_disc {self.display_opt.get()}")   
+        signal, time, signal_disc, n = generate_signal(self)
         self.display_plot(signal, time, signal_disc, n, 2)
 
     def display_both(self):
         # messagebox._show(message=f"in display_both {self.display_opt.get()}")
-        signal, time, signal_disc, n = self.generate_signal()
-        print(signal)
-        print(time)
+        signal, time, signal_disc, n = generate_signal(self)
         self.display_plot(signal, time, signal_disc, n, 3)
-        
-    def generate_signal(self):
-        # amplitude * cos(2*pi*F*t + phase shift)
-        amp = float(self.amplitude_txb.get())
-        phase_shift = float(self.phase_shift_txb.get())
-        freq = float(self.frequency_txb.get())
-        fs = float(self.fs_txb.get())
 
-        t = np.linspace(0, 1, 1000)
-
-        samples_per_second = int(fs) # nuber of samples per second
-        n = np.arange(samples_per_second) # creates an array from 0 -> samples_per_second - 1 
-        t_disc = n / fs # normailze the values of x-axis to be from 0 to 1 like t
-        
-        if fs < 2*freq:
-            messagebox.showerror(message="fs < f, this will cause aliasing")
-
-        if self.display_opt.get() == "Sin":
-            print("Sin")
-            signal = amp * np.sin(2*np.pi*freq*t + phase_shift)
-            signal_disc = amp * np.sin(2 * np.pi * freq * (n/fs) + phase_shift)
-        elif self.display_opt.get() == "Cos":
-            print("Cos")
-            signal = amp * np.cos(2*np.pi*freq*t + phase_shift)
-            signal_disc = amp * np.cos(2 * np.pi * freq * (n/fs) + phase_shift)
-
-        return signal, t, signal_disc, t_disc
-        
+    # ====================== Task 01 =================================================================
 
     def create_signal_processing_tab(self, root):
         # Read First Signal Button
@@ -247,7 +211,6 @@ class DSPApp:
 
         self.current_indices_result = []
         self.current_samples_result = []
-
 
     def read_signal_one(self):
         file_path = filedialog.askopenfilename(filetypes=[("Text Files", "*.txt")])
@@ -416,3 +379,4 @@ if __name__ == "__main__":
     root = tk.Tk()
     app = DSPApp(root)
     root.mainloop()
+    print('exit')

@@ -2,6 +2,7 @@
 *.txt
 *.png
 *.rar
+gui.ipynb
 
 # Ignore IDE-specific settings for PyCharm
 .idea/
