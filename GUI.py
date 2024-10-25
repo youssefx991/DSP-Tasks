@@ -106,6 +106,7 @@ class DSPApp:
         quantized_signal = []
         quantization_errors = []
         encoded_values = []
+        num_bits = int(np.log2(num_levels))
         for sample in signal:
             # Determine the quantization level
             level = int((sample - min_val) / level_width)
@@ -116,7 +117,9 @@ class DSPApp:
             error = sample - quantized_value
             
             # Append encoded signal (binary representation)
-            encoded_value = format(level, '0{}b'.format(int(self.num_bits_txb.get())))
+
+
+            encoded_value = format(level, '0{}b'.format(num_bits))
             encoded_values.append(encoded_value)
 
             quantized_signal.append(quantized_value)
