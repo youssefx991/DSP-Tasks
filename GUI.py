@@ -68,6 +68,9 @@ class DSPApp:
         self.plot_quantized_signal_btn = tk.Button(root, text="Plot Quantized Signal", command=self.plot_quantized_signal)
         self.plot_quantized_signal_btn.pack()
 
+        # Canvas for Matplotlib Figure to show signla plot
+        self.canvas = None
+
     def quantize_signal(self):
         num_levels_str = self.num_levels_txb.get()
         num_bits_str = self.num_bits_txb.get()
@@ -90,6 +93,7 @@ class DSPApp:
                 self.quantized_signal_display_txt.insert(tk.END, f"{encoded_value} {sample:.2f} error = {error}\n")
 
             QuantizationTest1("Quan1_Out.txt", encoded_values, quantized_samples)
+            return quantized_samples, errors, encoded_values
         else:
             messagebox.showerror("ERROR - Invalid Signal One")
 
@@ -125,9 +129,50 @@ class DSPApp:
             quantized_signal.append(quantized_value)
             quantization_errors.append(error)
 
+
         return quantized_signal, quantization_errors, encoded_values
+
     def plot_quantized_signal(self):
-        pass
+        quantized_samples, errors, encoded_values = self.quantize_signal()
+        signal = self.current_samples_one
+        time = np.arange(len(signal))
+
+        # Create a new window for the plot
+        plot_window = tk.Toplevel(self.root)
+        plot_window.title("Signal Plot")
+
+        # Create a new figure for the plot
+        figure, axis = plt.subplots(3, 1, figsize=(10, 6))  # 1 column for single plot, 2 columns for dual plots
+        axis[0].grid(True)
+        axis[1].grid(True)
+        axis[2].grid(True)
+        
+        # Original Signal
+        axis[0].plot(time, signal, color='black')
+        axis[0].set_title("Original Signal")
+        axis[0].set_xlabel("Time (s)")
+        axis[0].set_ylabel("Amplitude")
+        
+        # Quantized Signal
+        axis[1].plot(time, quantized_samples, color='green')
+        axis[1].set_title("Quantized Signal")
+        axis[1].set_xlabel("Time (s)")
+        axis[1].set_ylabel("Amplitude")
+
+        # Error
+        axis[2].plot(time, errors, color='red')
+        axis[2].set_title("Quantization Error")
+        axis[2].set_xlabel("Time (s)")
+        axis[2].set_ylabel("Error")
+
+        # Adjust layout
+        plt.tight_layout()
+
+        # Create a canvas for the figure
+        canvas = FigureCanvasTkAgg(figure, master=plot_window)
+        canvas.draw()
+        canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
+
     # ====================== Task 02 =================================================================
 
     def create_signal_generation_tab(self, root):
