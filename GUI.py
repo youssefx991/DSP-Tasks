@@ -5,6 +5,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from Task01.Task01 import *
 from Task02.task02 import *
 from Task01.Task1_testcases_and_testing_functions.DSP_Task2_TEST_functions import *
+from Task03.Test_1.QuanTest1 import *
 import numpy as np
 
 class DSPApp:
@@ -24,11 +25,106 @@ class DSPApp:
         self.signal_generation_frame = ttk.Frame(self.notebook)
         self.notebook.add(self.signal_generation_frame, text="Signal Generation")
 
+        # Tab 3: Task 3 - Quantization
+        self.signal_quantize_frame = ttk.Frame(self.notebook)
+        self.notebook.add(self.signal_quantize_frame, text="Signal Quantization")
+
         # Assign functions for creating tabs
         self.create_signal_processing_tab(self.signal_processing_frame)
         self.create_signal_generation_tab(self.signal_generation_frame)
+        self.create_signal_quantization_tab(self.signal_quantize_frame)
 
 
+    # ====================== Task 03 =================================================================
+    def create_signal_quantization_tab(self, root):
+        # description label
+        self.quantization_lbl = tk.Label(root, text="Quantization Settings")
+        self.quantization_lbl.pack()
+
+        # number of levels
+        self.num_levels_lbl = tk.Label(root, text = "Number of Quantization Levels") # label
+        self.num_levels_lbl.pack()
+        self.num_levels_txb = tk.Entry(root) # textbox
+        self.num_levels_txb.pack()
+
+        # number of bits
+        self.num_bits_lbl = tk.Label(root, text = "Number of bits") # label
+        self.num_bits_lbl.pack()
+        self.num_bits_txb = tk.Entry(root) # textbox
+        self.num_bits_txb.pack()
+
+        
+        # Display Result
+        self.quantized_signal_display_lbl = tk.Label(root, text="Quantized Signal")
+        self.quantized_signal_display_lbl.pack()
+        self.quantized_signal_display_txt = tk.Text(root, height=5, width=50)
+        self.quantized_signal_display_txt.pack()
+
+        # Quantize Button
+        self.quantize_btn = tk.Button(root, text="Quantize Signal", command=self.quantize_signal)
+        self.quantize_btn.pack()
+
+        # Plot Quantized Signal Button
+        self.plot_quantized_signal_btn = tk.Button(root, text="Plot Quantized Signal", command=self.plot_quantized_signal)
+        self.plot_quantized_signal_btn.pack()
+
+    def quantize_signal(self):
+        num_levels_str = self.num_levels_txb.get()
+        num_bits_str = self.num_bits_txb.get()
+
+        if num_levels_str.strip():
+            num_levels = int(num_levels_str)
+        elif num_bits_str.strip():
+            num_bits = int(num_bits_str)
+            num_levels = 2 ** num_bits
+        else:
+            messagebox.showerror("ERROR - Please enter number of levels or number of bits")
+
+        if self.current_indices_one and self.current_samples_one:
+            samples = self.current_samples_one
+            quantized_samples, errors, encoded_values = self.perform_quantization(samples, num_levels)
+            
+            # Display results
+            self.quantized_signal_display_txt.delete(1.0, tk.END)
+            for sample, error, encoded_value in zip(quantized_samples, errors, encoded_values):
+                self.quantized_signal_display_txt.insert(tk.END, f"{encoded_value} {sample:.2f} error = {error}\n")
+
+            QuantizationTest1("Quan1_Out.txt", encoded_values, quantized_samples)
+        else:
+            messagebox.showerror("ERROR - Invalid Signal One")
+
+
+
+
+    def perform_quantization(self, signal, num_levels):
+        # Define the range for quantization
+        min_val = min(signal)
+        max_val = max(signal)
+
+        # Create quantization levels
+        level_width = (max_val - min_val) / num_levels
+        quantized_signal = []
+        quantization_errors = []
+        encoded_values = []
+        for sample in signal:
+            # Determine the quantization level
+            level = int((sample - min_val) / level_width)
+            level = max(0, min(level, num_levels - 1))  # Clamp level to valid range between [0, max_level]
+            
+            # Calculate quantized value and error
+            quantized_value = min_val + (level + 0.5) * level_width
+            error = sample - quantized_value
+            
+            # Append encoded signal (binary representation)
+            encoded_value = format(level, '0{}b'.format(int(self.num_bits_txb.get())))
+            encoded_values.append(encoded_value)
+
+            quantized_signal.append(quantized_value)
+            quantization_errors.append(error)
+
+        return quantized_signal, quantization_errors, encoded_values
+    def plot_quantized_signal(self):
+        pass
     # ====================== Task 02 =================================================================
 
     def create_signal_generation_tab(self, root):
