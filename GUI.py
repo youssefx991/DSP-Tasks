@@ -6,6 +6,7 @@ from Task01.Task01 import *
 from Task02.task02 import *
 from Task01.Task1_testcases_and_testing_functions.DSP_Task2_TEST_functions import *
 from Task03.Test_1.QuanTest1 import *
+from Task03.Test_2.QuanTest2 import *
 import numpy as np
 
 class DSPApp:
@@ -85,14 +86,17 @@ class DSPApp:
 
         if self.current_indices_one and self.current_samples_one:
             samples = self.current_samples_one
-            quantized_samples, errors, encoded_values = self.perform_quantization(samples, num_levels)
+            quantized_samples, errors, encoded_values, levels = self.perform_quantization(samples, num_levels)
             
             # Display results
             self.quantized_signal_display_txt.delete(1.0, tk.END)
             for sample, error, encoded_value in zip(quantized_samples, errors, encoded_values):
                 self.quantized_signal_display_txt.insert(tk.END, f"{encoded_value} {sample:.2f} error = {error}\n")
 
-            QuantizationTest1("Quan1_Out.txt", encoded_values, quantized_samples)
+
+            QuantizationTest1("Quan1_Out.txt", encoded_values, quantized_samples) # test 1
+            # QuantizationTest2("Quan2_Out.txt", levels, encoded_values, quantized_samples, errors) # test 2
+
             return quantized_samples, errors, encoded_values
         else:
             messagebox.showerror("ERROR - Invalid Signal One")
@@ -110,6 +114,7 @@ class DSPApp:
         quantized_signal = []
         quantization_errors = []
         encoded_values = []
+        levels = []
         num_bits = int(np.log2(num_levels))
         for sample in signal:
             # Determine the quantization level
@@ -118,8 +123,8 @@ class DSPApp:
             
             # Calculate quantized value and error
             quantized_value = min_val + (level + 0.5) * level_width
-            error = sample - quantized_value
-            
+            error = quantized_value - sample
+            error = round(error, 3)
             # Append encoded signal (binary representation)
 
 
@@ -128,12 +133,12 @@ class DSPApp:
 
             quantized_signal.append(quantized_value)
             quantization_errors.append(error)
+            levels.append(level + 1)
 
-
-        return quantized_signal, quantization_errors, encoded_values
+        return quantized_signal, quantization_errors, encoded_values, levels
 
     def plot_quantized_signal(self):
-        quantized_samples, errors, encoded_values = self.quantize_signal()
+        quantized_samples, errors, encoded_values, levels = self.quantize_signal()
         signal = self.current_samples_one
         time = np.arange(len(signal))
 
