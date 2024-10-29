@@ -116,24 +116,40 @@ class DSPApp:
         encoded_values = []
         levels = []
         num_bits = int(np.log2(num_levels))
-        for sample in signal:
-            # Determine the quantization level
-            level = int((sample - min_val) / level_width)
-            level = max(0, min(level, num_levels - 1))  # Clamp level to valid range between [0, max_level]
+
+        intervals = []
+        midpoints = []
+
+        for i in range(num_levels):
+            start = min_val + i*level_width
+            end = start + level_width
+            midpoint = (start + end)/2
             
-            # Calculate quantized value and error
-            quantized_value = min_val + (level + 0.5) * level_width
-            error = quantized_value - sample
-            error = round(error, 3)
-            # Append encoded signal (binary representation)
+            start = round(start, 3)
+            end = round(end, 3)
+            midpoint = round(midpoint, 3)
 
+            intervals.append((start, end))
+            midpoints.append(midpoint)
 
-            encoded_value = format(level, '0{}b'.format(num_bits))
-            encoded_values.append(encoded_value)
+        
+        for sample in signal:
+            found = False
+            for level, (start, end) in enumerate(intervals):
+                if start <= sample <= end:
+                    found = True
+                    quantized_val = midpoints[level]
+                    error = round(quantized_val - sample, 3)
 
-            quantized_signal.append(quantized_value)
-            quantization_errors.append(error)
-            levels.append(level + 1)
+                    encoded_value = format(level, '0{}b'.format(num_bits))
+                    encoded_values.append(encoded_value)
+
+                    quantized_signal.append(quantized_val)
+                    quantization_errors.append(error)
+                    levels.append(level + 1)
+                    break
+            if not found:
+                print("Didn't find any level for sample: ", sample)
 
         return quantized_signal, quantization_errors, encoded_values, levels
 
