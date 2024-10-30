@@ -90,14 +90,14 @@ class DSPApp:
             
             # Display results
             self.quantized_signal_display_txt.delete(1.0, tk.END)
-            for sample, error, encoded_value in zip(quantized_samples, errors, encoded_values):
-                self.quantized_signal_display_txt.insert(tk.END, f"{encoded_value} {sample:.2f} error = {error}\n")
+            for sample, error, encoded_value, level in zip(quantized_samples, errors, encoded_values, levels):
+                self.quantized_signal_display_txt.insert(tk.END, f"level:{level} encoded:{encoded_value} sample:{sample:.2f} error:{error}\n")
 
 
-            QuantizationTest1("Quan1_Out.txt", encoded_values, quantized_samples) # test 1
+            # QuantizationTest1("Quan1_Out.txt", encoded_values, quantized_samples) # test 1
             # QuantizationTest2("Quan2_Out.txt", levels, encoded_values, quantized_samples, errors) # test 2
 
-            return quantized_samples, errors, encoded_values
+            return quantized_samples, errors, encoded_values, levels
         else:
             messagebox.showerror("ERROR - Invalid Signal One")
 
@@ -156,7 +156,7 @@ class DSPApp:
     def plot_quantized_signal(self):
         quantized_samples, errors, encoded_values, levels = self.quantize_signal()
         signal = self.current_samples_one
-        time = np.arange(len(signal))
+        indices = self.current_indices_one
 
         # Create a new window for the plot
         plot_window = tk.Toplevel(self.root)
@@ -169,21 +169,21 @@ class DSPApp:
         axis[2].grid(True)
         
         # Original Signal
-        axis[0].plot(time, signal, color='black')
+        axis[0].plot(indices, signal, color='black')
         axis[0].set_title("Original Signal")
-        axis[0].set_xlabel("Time (s)")
+        axis[0].set_xlabel("Incices")
         axis[0].set_ylabel("Amplitude")
         
         # Quantized Signal
-        axis[1].plot(time, quantized_samples, color='green')
+        axis[1].plot(indices, quantized_samples, color='green')
         axis[1].set_title("Quantized Signal")
-        axis[1].set_xlabel("Time (s)")
+        axis[1].set_xlabel("Indices")
         axis[1].set_ylabel("Amplitude")
 
         # Error
-        axis[2].plot(time, errors, color='red')
+        axis[2].plot(indices, errors, color='red')
         axis[2].set_title("Quantization Error")
-        axis[2].set_xlabel("Time (s)")
+        axis[2].set_xlabel("")
         axis[2].set_ylabel("Error")
 
         # Adjust layout
