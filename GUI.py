@@ -30,18 +30,122 @@ class DSPApp:
         self.signal_quantize_frame = ttk.Frame(self.notebook)
         self.notebook.add(self.signal_quantize_frame, text="Signal Quantization")
 
+        # Task 5: Convolution
+        self.signal_conv_frame = ttk.Frame(self.notebook)
+        self.notebook.add(self.signal_conv_frame, text="Signal Convolution")
+
         # Assign functions for creating tabs
         self.create_signal_processing_tab(self.signal_processing_frame)
         self.create_signal_generation_tab(self.signal_generation_frame)
         self.create_signal_quantization_tab(self.signal_quantize_frame)
+        self.create_signal_conv_tab(self.signal_conv_frame)
+
+    # ====================== Task 05 =================================================================
+    def create_signal_conv_tab(self, root):
+        # Read First Signal Button
+        self.read_signal_one_button = tk.Button(root, text="Read Signal 1", command=self.read_signal_one) # button
+        self.read_signal_one_button.pack()
+
+        # Read Second Signal Button
+        self.read_signal_two_button = tk.Button(root, text="Read Signal 2", command=self.read_signal_two) # button
+        self.read_signal_two_button.pack()
+
+        # Getting Window Size for Averaging
+        self.window_size_label = tk.Label(root, text="Window Size") # label
+        self.window_size_label.pack()
+        self.window_size_entry = tk.Entry(root) # entry
+        self.window_size_entry.pack()
+
+        # Text widget for displaying the signal 1 text
+        self.signal_one_display_label = tk.Label(root, text="Result Signal 1");   # label
+        self.signal_one_display_label.pack()
+        self.signal_one_display_text = tk.Text(root, height=3, width=75)    # text
+        self.signal_one_display_text.pack()
+
+        # Text widget for displaying the signal 2 text
+        self.signal_two_display_label = tk.Label(root, text="Result Signal 2");   # label
+        self.signal_two_display_label.pack()
+        self.signal_two_display_text = tk.Text(root, height=3, width=75)    # text
+        self.signal_two_display_text.pack()
+
+        # Text widget for displaying the signal result text
+        self.signal_result_display_label = tk.Label(root, text="Result Signal");   # label
+        self.signal_result_display_label.pack()
+        self.signal_result_display_text = tk.Text(root, height=3, width=75)    # text
+        self.signal_result_display_text.pack()
+
+        # Average Signal button
+        self.average_signal_button = tk.Button(root, text="Average", command=self.average_signal) # button
+        self.average_signal_button.pack()
+        
+        # First Derivative button
+        self.first_diff_button = tk.Button(root, text="First Derivative", command=self.first_derivative) # button
+        self.first_diff_button.pack()
+        
+        # Second Derivative button
+        self.second_diff_button = tk.Button(root, text="Second Derivative", command=self.second_derivative) # button
+        self.second_diff_button.pack()
+        
+        # Convolution button
+        self.conv_button = tk.Button(root, text="Convolution", command=self.conv_signal) # button
+        self.conv_button.pack()
+        
+
+        # Display Signal 1 plot
+        self.display_one_signal_button = tk.Button(root, text="Display Signal 1", command=self.display_signal_one) # button
+        self.display_one_signal_button.pack()
+
+        # Display Signal 2 plot
+        self.display_signal_two_button = tk.Button(root, text="Display Signal 2", command=self.display_signal_two) # button
+        self.display_signal_two_button.pack()
+
+        # Display Signal result plot
+        self.display_signal_result_button = tk.Button(root, text="Display Signal result", command=self.display_signal_result) # button
+        self.display_signal_result_button.pack()
 
 
+    def average_signal(self):
+        if self.window_size_entry.get():
+            window_size = int(self.window_size_entry.get())
+        else:
+            messagebox.showerror("ERROR - Window size must be greater than 0")
+            return
+
+        if self.current_indices_one and self.current_samples_one:
+            indices = self.current_indices_one
+            samples = self.current_samples_one
+            averaged_samples = []
+            n = len(samples)
+            
+            for i in range(n):
+                window_start = i - window_size + 1 # actual start of window, could be negative
+                start = max(0, window_start) # if it is negative then start from 0
+                
+                values = samples[start : i + 1] # get all values starting from start to the current index
+                total_sum = sum(values) # sum all values in current window
+                number_of_samples = len(values) # number of values in current window
+                
+                averaged_sample = total_sum / number_of_samples
+                averaged_sample = round(averaged_sample, 3) # round to 3 for test cases
+                averaged_samples.append(averaged_sample) # average = (sum / #samples)
+                
+            self.current_indices_result, self.current_samples_result = indices, averaged_samples
+            self.display_signal_result_text(self.current_indices_result, self.current_samples_result)
+        else:
+            messagebox.showerror("ERROR - Invalid Signal one data")
+    def first_derivative(self):
+        pass
+    def second_derivative(self):
+        pass
+    def conv_signal(self):
+        pass
     # ====================== Task 03 =================================================================
     def create_signal_quantization_tab(self, root):
         # description label
         self.quantization_lbl = tk.Label(root, text="Quantization Settings")
         self.quantization_lbl.pack()
 
+        
         # number of levels
         self.num_levels_lbl = tk.Label(root, text = "Number of Quantization Levels") # label
         self.num_levels_lbl.pack()
@@ -58,7 +162,7 @@ class DSPApp:
         # Display Result
         self.quantized_signal_display_lbl = tk.Label(root, text="Quantized Signal")
         self.quantized_signal_display_lbl.pack()
-        self.quantized_signal_display_txt = tk.Text(root, height=5, width=50)
+        self.quantized_signal_display_txt = tk.Text(root, height=5, width=75)
         self.quantized_signal_display_txt.pack()
 
         # Quantize Button
@@ -337,19 +441,19 @@ class DSPApp:
         # Text widget for displaying the signal 1 text
         self.signal_one_display_label = tk.Label(root, text="Result Signal 1");   # label
         self.signal_one_display_label.pack()
-        self.signal_one_display_text = tk.Text(root, height=1, width=50)    # text
+        self.signal_one_display_text = tk.Text(root, height=3, width=75)    # text
         self.signal_one_display_text.pack()
 
         # Text widget for displaying the signal 2 text
         self.signal_two_display_label = tk.Label(root, text="Result Signal 2");   # label
         self.signal_two_display_label.pack()
-        self.signal_two_display_text = tk.Text(root, height=1, width=50)    # text
+        self.signal_two_display_text = tk.Text(root, height=3, width=75)    # text
         self.signal_two_display_text.pack()
 
         # Text widget for displaying the signal result text
         self.signal_result_display_label = tk.Label(root, text="Result Signal");   # label
         self.signal_result_display_label.pack()
-        self.signal_result_display_text = tk.Text(root, height=1, width=50)    # text
+        self.signal_result_display_text = tk.Text(root, height=3, width=75)    # text
         self.signal_result_display_text.pack()
 
         # Display Signal 1 plot
