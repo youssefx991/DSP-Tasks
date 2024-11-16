@@ -524,11 +524,6 @@ class DSPApp:
     def display_signal_one(self):
         if self.current_indices_one and self.current_samples_one: # There exists a current used signal
             
-            self.signal_one_display_text.delete(1.0, tk.END) # clear text from previous signal data
-            self.signal_one_display_text.insert(tk.END, self.current_indices_one)   # fill it with cirrent signal data
-            self.signal_one_display_text.insert(tk.END, self.current_samples_one)   # fill it with cirrent signal data
-            # display_signal(self.current_indices_one, self.current_samples_one)
-
             # Create a new window for the plot
             plot_window = tk.Toplevel(self.root)
             plot_window.title("Signal Plot")
@@ -550,11 +545,6 @@ class DSPApp:
     def display_signal_two(self):
         if self.current_indices_two and self.current_samples_two: # There exists a current used signal
             
-            self.signal_two_display_text.delete(1.0, tk.END) # clear text from previous signal data
-            self.signal_two_display_text.insert(tk.END, self.current_indices_two)   # fill it with cirrent signal data
-            self.signal_two_display_text.insert(tk.END, self.current_samples_two)   # fill it with cirrent signal data
-            # display_signal(self.current_indices_two, self.current_samples_two)
-
             # Create a new window for the plot
             plot_window = tk.Toplevel(self.root)
             plot_window.title("Signal Plot")
