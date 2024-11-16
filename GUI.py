@@ -179,7 +179,32 @@ class DSPApp:
         else:
             messagebox.showerror("ERROR - Invalid Signal one data")
     def conv_signal(self):
-        pass
+        if self.current_indices_one and self.current_samples_one and self.current_indices_two and self.current_samples_two:
+            indices_one = self.current_indices_one
+            samples_one = self.current_samples_one
+            indices_two = self.current_indices_two
+            samples_two = self.current_samples_two
+            indices_conv = []
+            samples_conv = []
+            
+            len_one = len(samples_one)
+            len_two = len(samples_two)
+            len_conv = (len_one + len_two - 1)
+            
+            samples_conv = [0] * len_conv
+            first_index_conv = indices_one[0] + indices_two[0]
+            last_index_conv = indices_one[len_one - 1] + indices_two[len_two -1]
+            indices_conv = list(range(first_index_conv, last_index_conv + 1))
+            
+            for n in range(len_conv):
+                for m in range(len_one):
+                    if 0 <= n - m < len_two:
+                        samples_conv[n] += samples_one[m] * samples_two[n - m]
+            self.current_indices_result, self.current_samples_result = indices_conv, samples_conv
+            self.display_signal_result_text(self.current_indices_result, self.current_samples_result)
+            
+        else:
+            messagebox.showerror("ERROR -- Signals not valid for Convolution")
     # ====================== Task 03 =================================================================
     def create_signal_quantization_tab(self, root):
         # description label
