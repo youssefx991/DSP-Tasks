@@ -574,13 +574,8 @@ class DSPApp:
             messagebox.showerror("ERROR in Displaying Signal 2 plot- Current Signal not valid to display plot")
 
     def display_signal_result(self):
-        if self.current_indices_two and self.current_samples_two: # There exists a current used signal
+        if self.current_indices_result and self.current_samples_result: # There exists a current used signal
             
-            self.signal_result_display_text.delete(1.0, tk.END) # clear text from previous signal data
-            self.signal_result_display_text.insert(tk.END, self.current_indices_result)   # fill it with cirrent signal data
-            self.signal_result_display_text.insert(tk.END, self.current_samples_result)   # fill it with cirrent signal data
-            # display_signal(self.current_indices_result, self.current_samples_result)
-
             # Create a new window for the plot
             plot_window = tk.Toplevel(self.root)
             plot_window.title("Signal Plot")
