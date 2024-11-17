@@ -160,26 +160,11 @@ class DSPApp:
         if self.current_indices_one and self.current_samples_one:
             indices = self.current_indices_one
             samples = self.current_samples_one
-            n = len(samples)
-            diff_samples = []
             
-            for i in range(n):
-                sample_before = 0
-                sample_after = 0
-                if n == 1: # only one sample, no left or right index
-                    sample_before = 0
-                    sample_after = 0
-                elif i > 0 and i < n-1: # if i has left and right index (between two samples)
-                    sample_before = samples[i-1]
-                    sample_after = samples[i+1]
-                elif i == 0: # first index, only right index is found, left is 0
-                    sample_after = samples[i+1]
-                elif i == n-1: # last index, only left index is found, right is 0
-                    sample_before = samples[i-1]
-                
-                sample = sample_after - 2*samples[i] + sample_before
-                diff_samples.append(sample)
-            self.current_indices_result, self.current_samples_result = indices, diff_samples
+            diff1_indices, diff1_samples = self.perform_derivative(indices, samples)
+            diff2_indices, diff2_samples = self.perform_derivative(diff1_indices, diff1_samples)
+            
+            self.current_indices_result, self.current_samples_result = diff2_indices, diff2_samples
             self.display_signal_result_text(self.current_indices_result, self.current_samples_result)
         else:
             messagebox.showerror("ERROR - Invalid Signal one data")
