@@ -7,6 +7,7 @@ from Task02.task02 import *
 from Task01.Task1_testcases_and_testing_functions.DSP_Task2_TEST_functions import *
 from Task03.Test_1.QuanTest1 import *
 from Task03.Test_2.QuanTest2 import *
+from Task05.testcases.Task05_test import *
 import numpy as np
 
 class DSPApp:
@@ -132,6 +133,8 @@ class DSPApp:
                 
             self.current_indices_result, self.current_samples_result = averaged_indices, averaged_samples
             self.display_signal_result_text(self.current_indices_result, self.current_samples_result)
+            
+            compare_signals("MovingAvg_out1.txt", averaged_indices, averaged_samples, window_size)
         else:
             messagebox.showerror("ERROR - Invalid Signal one data")
     
@@ -144,6 +147,8 @@ class DSPApp:
             
             self.current_indices_result, self.current_samples_result = diff_indices, diff_samples
             self.display_signal_result_text(self.current_indices_result, self.current_samples_result)
+            
+            compare_signals("1st_derivative_out.txt", diff_indices, diff_samples)
         else:
             messagebox.showerror("ERROR - Invalid Signal one data")
             
@@ -166,6 +171,8 @@ class DSPApp:
             
             self.current_indices_result, self.current_samples_result = diff2_indices, diff2_samples
             self.display_signal_result_text(self.current_indices_result, self.current_samples_result)
+            
+            compare_signals("2nd_derivative_out.txt", diff2_indices, diff2_samples)
         else:
             messagebox.showerror("ERROR - Invalid Signal one data")
     def conv_signal(self):
@@ -193,6 +200,7 @@ class DSPApp:
             self.current_indices_result, self.current_samples_result = indices_conv, samples_conv
             self.display_signal_result_text(self.current_indices_result, self.current_samples_result)
             
+            compare_signals("Conv_output.txt", indices_conv, samples_conv)
         else:
             messagebox.showerror("ERROR -- Signals not valid for Convolution")
     # ====================== Task 03 =================================================================
