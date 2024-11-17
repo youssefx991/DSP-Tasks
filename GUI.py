@@ -139,19 +139,23 @@ class DSPApp:
         if self.current_indices_one and self.current_samples_one:
             indices = self.current_indices_one
             samples = self.current_samples_one
-            n = len(samples)
-            diff_samples = []
             
-            for i in range(n):
-                if i == 0:
-                    sample = samples[i]
-                else:
-                    sample = samples[i] - samples[i-1]
-                diff_samples.append(sample)
-            self.current_indices_result, self.current_samples_result = indices, diff_samples
+            diff_indices, diff_samples = self.perform_derivative(indices, samples)
+            
+            self.current_indices_result, self.current_samples_result = diff_indices, diff_samples
             self.display_signal_result_text(self.current_indices_result, self.current_samples_result)
         else:
             messagebox.showerror("ERROR - Invalid Signal one data")
+            
+    def perform_derivative(self, indices, samples):
+        n = len(samples)
+        diff_samples = []
+        diff_indices = indices[0 : n-1]
+        for i in range(1, n):
+            sample = samples[i] - samples[i-1]
+            diff_samples.append(sample)
+        
+        return diff_indices, diff_samples
     def second_derivative(self):
         if self.current_indices_one and self.current_samples_one:
             indices = self.current_indices_one
