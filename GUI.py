@@ -114,10 +114,11 @@ class DSPApp:
         if self.current_indices_one and self.current_samples_one:
             indices = self.current_indices_one
             samples = self.current_samples_one
-            averaged_samples = []
             n = len(samples)
+            averaged_samples = []
+            averaged_indices = indices[0:n-window_size+1]
             
-            for i in range(n):
+            for i in range(window_size - 1, n):
                 window_start = i - window_size + 1 # actual start of window, could be negative
                 start = max(0, window_start) # if it is negative then start from 0
                 
@@ -129,7 +130,7 @@ class DSPApp:
                 averaged_sample = round(averaged_sample, 3) # round to 3 for test cases
                 averaged_samples.append(averaged_sample) # average = (sum / #samples)
                 
-            self.current_indices_result, self.current_samples_result = indices, averaged_samples
+            self.current_indices_result, self.current_samples_result = averaged_indices, averaged_samples
             self.display_signal_result_text(self.current_indices_result, self.current_samples_result)
         else:
             messagebox.showerror("ERROR - Invalid Signal one data")
