@@ -50,29 +50,20 @@ class DSPApp:
 
     # ====================== Task 07 =================================================================
     
-    # def read_dft_signal(self):
-    #     file_path = filedialog.askopenfilename(filetypes=[("Text Files", "*.txt")])
-    #     if file_path:
-    #         self.current_indices_one, self.current_samples_one = ReadSignalFile(file_path)
-    #         # self.display_signal_one_text(self.current_indices_one, self.current_samples_one)
-    #     else:
-    #         messagebox.showerror("ERROR in Reading Signal 1 - Only Text files are allowd")
-
-    
     def create_signal_dft_tab(self, root):
         # Text widget for displaying the signal 1 text
         tk.Label(root, text="Signal").pack()
         self.signal_one_display_text = tk.Text(root, height=3, width=75)    # text
         self.signal_one_display_text.pack()
         # Read First Signal Button
-        tk.Button(root, text="Read Signal", command=self.read_signal_one).pack() # button
+        tk.Button(root, text="Read Signal", command=lambda: self.read_signal_one(1,1)).pack() # button
 
         # Text widget for displaying the signal 2 text
         tk.Label(root, text="DFT Signal").pack()
         self.signal_two_display_text = tk.Text(root, height=3, width=75)    # text
         self.signal_two_display_text.pack()
         # Read DFT Signal Button
-        tk.Button(root, text="Read DFT Signal", command=lambda: self.read_signal_two(2)).pack() # button
+        tk.Button(root, text="Read DFT Signal", command=lambda: self.read_signal_two(2,2)).pack() # button
 
         tk.Label(root, text="Sampling Frequency").pack()
         self.fs_txb = tk.Entry(root)
@@ -602,42 +593,48 @@ class DSPApp:
         self.current_indices_result = []
         self.current_samples_result = []
 
-    def read_signal_one(self, opt=1):
+    def read_signal_one(self, opt=1, opt2=1):
         file_path = filedialog.askopenfilename(filetypes=[("Text Files", "*.txt")])
         if file_path:
             self.current_indices_one, self.current_samples_one = ReadSignalFile(file_path, opt)
-            self.display_signal_one_text(self.current_indices_one, self.current_samples_one)
+            self.display_signal_one_text(self.current_indices_one, self.current_samples_one, opt2)
         else:
             messagebox.showerror("ERROR in Reading Signal 1 - Only Text files are allowd")
 
-    def read_signal_two(self, opt=1):
+    def read_signal_two(self, opt=1, opt2=1):
         file_path = filedialog.askopenfilename(filetypes=[("Text Files", "*.txt")])
         if file_path:
             self.current_indices_two, self.current_samples_two = ReadSignalFile(file_path, opt)
-            self.display_signal_two_text(self.current_indices_two, self.current_samples_two)
+            self.display_signal_two_text(self.current_indices_two, self.current_samples_two, opt2)
         else:
             messagebox.showerror("ERROR in Reading Signal 2 - Only Text files are allowd")
 
-    def display_signal_one_text(self, indices, samples):
+    def display_signal_one_text(self, indices, samples, opt=1):
         if indices and samples: # There exists a current used signal
             self.signal_one_display_text.delete(1.0, tk.END)
-            self.signal_one_display_text.insert(tk.END, f"Indices: {indices}\nSamples: {samples}\n")
+            if opt==1: n1, n2 = "Indices", "Samples"
+            else: n1, n2 = "Amplitude", "Phase"
+            self.signal_one_display_text.insert(tk.END, f"{n1}: {indices}\n{n2}: {samples}\n")
             # display_signal(indices, samples)
         else:
             messagebox.showerror("ERROR in Displaying Signal 1 text- Passed Signal to display text is not valid")
             
-    def display_signal_two_text(self, indices, samples):
+    def display_signal_two_text(self, indices, samples, opt=1):
         if indices and samples: # There exists a current used signal
             self.signal_two_display_text.delete(1.0, tk.END)
-            self.signal_two_display_text.insert(tk.END, f"Indices: {indices}\nSamples: {samples}\n")
+            if opt==1: n1, n2 = "Indices", "Samples"
+            else: n1, n2 = "Amplitude", "Phase"
+            self.signal_two_display_text.insert(tk.END, f"{n1}: {indices}\n{n2}: {samples}\n")
             # display_signal(indices, samples)
         else:
             messagebox.showerror("ERROR in Displaying Signal 2 text- Passed Signal to display text is not valid")
 
-    def display_signal_result_text(self, indices, samples):
+    def display_signal_result_text(self, indices, samples, opt=1):
         if indices and samples: # There exists a current used signal
             self.signal_result_display_text.delete(1.0, tk.END)
-            self.signal_result_display_text.insert(tk.END, f"Indices: {self.current_indices_result}\nSamples: {self.current_samples_result}\n")
+            if opt==1: n1, n2 = "Indices", "Samples"
+            else: n1, n2 = "Amplitude", "Phase"
+            self.signal_result_display_text.insert(tk.END, f"{n1}: {indices}\n{n2}: {samples}\n")
             # display_signal(self.current_indices_result, self.current_samples_result)
         else:
             messagebox.showerror("ERROR in Displaying Signal result text- Passed Signal to display text is not valid")

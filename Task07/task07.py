@@ -1,30 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from Task01.Task1_testcases_and_testing_functions.DSP_Task2_TEST_functions import *
+from Task07.TestCases.signalcompare import *
 
-
-def read_output_signal(file_name):
-    indices=[]
-    samples=[]
-    with open(file_name, 'r') as f:
-        line = f.readline()
-        line = f.readline()
-        line = f.readline()
-        line = f.readline()
-        while line:
-            # process line
-            L=line.strip()
-            if len(L.split(' '))==2:
-                L=line.split(' ')
-                V1=float(L[0])
-                V2=float(L[1])
-                indices.append(V1)
-                samples.append(V2)
-                line = f.readline()
-            else:
-                break
-    return indices,samples
 def test_dft(amplitudes, phases):
-    expected_amplitudes, expected_phases = read_output_signal("Output_Signal_DFT_A,Phase.txt")
+    expected_amplitudes, expected_phases = ReadSignalFile("Output_Signal_DFT_A,Phase.txt", 2)
     result = SignalComapreAmplitude(amplitudes, expected_amplitudes)
     if result:
         print("Amplitude Test Case Passed")
@@ -39,7 +19,7 @@ def test_dft(amplitudes, phases):
     
     
 def test_idft(indices, samples):
-    expected_indices, expected_samples = read_output_signal("Output_Signal_IDFT.txt")
+    expected_indices, expected_samples = ReadSignalFile("Output_Signal_IDFT.txt", 2)
     result = SignalComapreAmplitude(indices, expected_indices)
     if result:
         print("Indices Test Case Passed")
@@ -51,10 +31,12 @@ def test_idft(indices, samples):
         print("Samples Test Case Passed")
     else:
         print("Samples Test Case Failed")
+
 def DFT(gui):
     indices = gui.current_indices_one
     samples = gui.current_samples_one
     gui.dft_real, gui.dft_imag, gui.dft_amp, gui.dft_phase = perform_dft(indices, samples)
+    gui.display_signal_result_text(gui.dft_amp, gui.dft_phase, 2)
     print("dft_real = ", gui.dft_real)
     print("dft_imag = ", gui.dft_imag)
     print("dft_amp = ", gui.dft_amp)
@@ -73,6 +55,7 @@ def IDFT(gui):
         
     gui.idft_indices, gui.idft_samples = perform_idft(real, imag)
     gui.current_indices_result, gui.current_samples_result = gui.idft_indices, gui.idft_samples
+    gui.display_signal_result_text(gui.current_indices_result, gui.current_samples_result, 1)
     
     print("dft_real = ", gui.dft_real)
     print("dft_imag = ", gui.dft_imag)
@@ -152,36 +135,3 @@ def plot_frequency(gui):
     plt.tight_layout()
     plt.show()
     
-
-
-#Use to test the Amplitude of DFT and IDFT
-def SignalComapreAmplitude(SignalInput = [] ,SignalOutput= []):
-    if len(SignalInput) != len(SignalOutput):
-        return False
-    else:
-        for i in range(len(SignalInput)):
-            if abs(SignalInput[i]-SignalOutput[i])>0.001:
-                return False
-            # elif SignalInput[i]!=SignalOutput[i]:
-            #     return False
-        return True
-
-def RoundPhaseShift(P):
-    while P<0:
-        p+=2*math.pi
-    return float(P%(2*math.pi))
-
-#Use to test the PhaseShift of DFT
-def SignalComaprePhaseShift(SignalInput = [] ,SignalOutput= []):
-    if len(SignalInput) != len(SignalOutput):
-        return False
-    else:
-        for i in range(len(SignalInput)):
-            A=round(SignalInput[i])
-            B=round(SignalOutput[i])
-            if abs(A-B)>0.0001:
-                return False
-            # elif A!=B:
-            #     return False
-        return True
-
