@@ -9,6 +9,7 @@ from Task03.Test_1.QuanTest1 import *
 from Task03.Test_2.QuanTest2 import *
 from Task05.testcases.Task05_test import *
 from Task07.task07 import *
+from Task07.TestCases import *
 import numpy as np
 
 class DSPApp:
@@ -60,11 +61,11 @@ class DSPApp:
     
     def create_signal_dft_tab(self, root):
         # Text widget for displaying the signal 1 text
-        tk.Label(root, text="Signal 1").pack()
+        tk.Label(root, text="Signal").pack()
         self.signal_one_display_text = tk.Text(root, height=3, width=75)    # text
         self.signal_one_display_text.pack()
         # Read First Signal Button
-        tk.Button(root, text="Read Signal 1", command=self.read_signal_one).pack() # button
+        tk.Button(root, text="Read Signal", command=self.read_signal_one).pack() # button
 
         # Text widget for displaying the signal 2 text
         tk.Label(root, text="DFT Signal").pack()
@@ -77,7 +78,6 @@ class DSPApp:
         self.fs_txb = tk.Entry(root)
         self.fs_txb.pack()
 
-        self.dft_real, self.dft_imaginary = [], []
         tk.Button(root, text="Perform DFT", command=lambda: DFT(self)).pack()
         tk.Button(root, text="Perform IDFT", command=lambda: IDFT(self)).pack()
 
@@ -93,6 +93,16 @@ class DSPApp:
 
         # plot freq and phase Button
         tk.Button(root, text="Plot freq&phase", command=lambda: plot_freq_amplitude(self)).pack() # button
+        
+        # variables
+        self.dft_real = []
+        self.dft_imag = []
+        self.dft_amp = []
+        self.dft_phase = []
+        self.idft_indices = []
+        self.idft_samples = []
+        
+        
 
     # ====================== Task 05 =================================================================
     def create_signal_conv_tab(self, root):
