@@ -8,6 +8,7 @@ from Task01.Task1_testcases_and_testing_functions.DSP_Task2_TEST_functions impor
 from Task03.Test_1.QuanTest1 import *
 from Task03.Test_2.QuanTest2 import *
 from Task05.testcases.Task05_test import *
+from Task07.task07 import *
 import numpy as np
 
 class DSPApp:
@@ -35,11 +36,63 @@ class DSPApp:
         self.signal_conv_frame = ttk.Frame(self.notebook)
         self.notebook.add(self.signal_conv_frame, text="Signal Convolution")
 
+        # Task 7: DFT
+        self.dft_frame = ttk.Frame(self.notebook)
+        self.notebook.add(self.dft_frame, text="DFT")
+
         # Assign functions for creating tabs
         self.create_signal_processing_tab(self.signal_processing_frame)
         self.create_signal_generation_tab(self.signal_generation_frame)
         self.create_signal_quantization_tab(self.signal_quantize_frame)
         self.create_signal_conv_tab(self.signal_conv_frame)
+        self.create_signal_dft_tab(self.dft_frame)
+
+    # ====================== Task 07 =================================================================
+    
+    # def read_dft_signal(self):
+    #     file_path = filedialog.askopenfilename(filetypes=[("Text Files", "*.txt")])
+    #     if file_path:
+    #         self.current_indices_one, self.current_samples_one = ReadSignalFile(file_path)
+    #         # self.display_signal_one_text(self.current_indices_one, self.current_samples_one)
+    #     else:
+    #         messagebox.showerror("ERROR in Reading Signal 1 - Only Text files are allowd")
+
+    
+    def create_signal_dft_tab(self, root):
+        # Text widget for displaying the signal 1 text
+        tk.Label(root, text="Signal 1").pack()
+        self.signal_one_display_text = tk.Text(root, height=3, width=75)    # text
+        self.signal_one_display_text.pack()
+        # Read First Signal Button
+        tk.Button(root, text="Read Signal 1", command=self.read_signal_one).pack() # button
+
+        # Text widget for displaying the signal 2 text
+        tk.Label(root, text="DFT Signal").pack()
+        self.signal_two_display_text = tk.Text(root, height=3, width=75)    # text
+        self.signal_two_display_text.pack()
+        # Read DFT Signal Button
+        tk.Button(root, text="Read DFT Signal", command=lambda: self.read_signal_two(2)).pack() # button
+
+        tk.Label(root, text="Sampling Frequency").pack()
+        self.fs_txb = tk.Entry(root)
+        self.fs_txb.pack()
+
+        self.dft_real, self.dft_imaginary = [], []
+        tk.Button(root, text="Perform DFT", command=lambda: DFT(self)).pack()
+        tk.Button(root, text="Perform IDFT", command=lambda: IDFT(self)).pack()
+
+        # Text widget for displaying the signal result text
+        tk.Label(root, text="Result Signal").pack()
+        self.signal_result_display_text = tk.Text(root, height=3, width=75)    # text
+        self.signal_result_display_text.pack()
+        # Display Signal result plot
+        tk.Button(root, text="Display Signal result", command=self.display_signal_result).pack()
+
+        # plot freq and amplitude Button
+        tk.Button(root, text="Plot freq&amplitude", command=lambda: plot_freq_amplitude(self)).pack() # button
+
+        # plot freq and phase Button
+        tk.Button(root, text="Plot freq&phase", command=lambda: plot_freq_amplitude(self)).pack() # button
 
     # ====================== Task 05 =================================================================
     def create_signal_conv_tab(self, root):
@@ -104,7 +157,6 @@ class DSPApp:
         self.display_signal_result_button = tk.Button(root, text="Display Signal result", command=self.display_signal_result) # button
         self.display_signal_result_button.pack()
 
-
     def average_signal(self):
         if self.window_size_entry.get():
             window_size = int(self.window_size_entry.get())
@@ -125,9 +177,8 @@ class DSPApp:
                 
                 values = samples[start : i + 1] # get all values starting from start to the current index
                 total_sum = sum(values) # sum all values in current window
-                number_of_samples = len(values) # number of values in current window
                 
-                averaged_sample = total_sum / number_of_samples
+                averaged_sample = total_sum / window_size
                 averaged_sample = round(averaged_sample, 3) # round to 3 for test cases
                 averaged_samples.append(averaged_sample) # average = (sum / #samples)
                 
@@ -197,12 +248,14 @@ class DSPApp:
                 for m in range(len_one):
                     if 0 <= n - m < len_two:
                         samples_conv[n] += samples_one[m] * samples_two[n - m]
+                        
             self.current_indices_result, self.current_samples_result = indices_conv, samples_conv
             self.display_signal_result_text(self.current_indices_result, self.current_samples_result)
             
             compare_signals("Conv_output.txt", indices_conv, samples_conv)
         else:
             messagebox.showerror("ERROR -- Signals not valid for Convolution")
+
     # ====================== Task 03 =================================================================
     def create_signal_quantization_tab(self, root):
         # description label
@@ -268,9 +321,6 @@ class DSPApp:
             return quantized_samples, errors, encoded_values, levels
         else:
             messagebox.showerror("ERROR - Invalid Signal One")
-
-
-
 
     def perform_quantization(self, signal, num_levels):
         # Define the range for quantization
@@ -545,18 +595,18 @@ class DSPApp:
         self.current_indices_result = []
         self.current_samples_result = []
 
-    def read_signal_one(self):
+    def read_signal_one(self, opt=1):
         file_path = filedialog.askopenfilename(filetypes=[("Text Files", "*.txt")])
         if file_path:
-            self.current_indices_one, self.current_samples_one = ReadSignalFile(file_path)
+            self.current_indices_one, self.current_samples_one = ReadSignalFile(file_path, opt)
             self.display_signal_one_text(self.current_indices_one, self.current_samples_one)
         else:
             messagebox.showerror("ERROR in Reading Signal 1 - Only Text files are allowd")
 
-    def read_signal_two(self):
+    def read_signal_two(self, opt=1):
         file_path = filedialog.askopenfilename(filetypes=[("Text Files", "*.txt")])
         if file_path:
-            self.current_indices_two, self.current_samples_two = ReadSignalFile(file_path)
+            self.current_indices_two, self.current_samples_two = ReadSignalFile(file_path, opt)
             self.display_signal_two_text(self.current_indices_two, self.current_samples_two)
         else:
             messagebox.showerror("ERROR in Reading Signal 2 - Only Text files are allowd")

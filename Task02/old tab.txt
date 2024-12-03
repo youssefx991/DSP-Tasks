@@ -1,0 +1,115 @@
+def create_signal_generation_tab(self, root):
+        # Placeholder for future functionality in the new tab
+        placeholder_label = tk.Label(root, text="Future features can be added here.")
+        placeholder_label.pack()
+
+        # Create input fields
+        tk.Label(root, text="Amplitude:").grid(row=0, column=0)
+        self.amplitude = tk.Entry(root)
+        self.amplitude.grid(row=0, column=1)
+
+        tk.Label(root, text="Phase Shift (θ):").grid(row=1, column=0)
+        self.phase_shift = tk.Entry(root)
+        self.phase_shift.grid(row=1, column=1)
+
+        tk.Label(root, text="Analog Frequency (f):").grid(row=2, column=0)
+        self.freq = tk.Entry(root)
+        self.freq.grid(row=2, column=1)
+
+        tk.Label(root, text="Sampling Frequency (fs):").grid(row=3, column=0)
+        self.sampling_freq = tk.Entry(root)
+        self.sampling_freq.grid(row=3, column=1)
+
+        # Checkbox to select continuous or discrete
+        self.continuous = tk.BooleanVar(value=True)
+        tk.Checkbutton(root, text="Continuous Signal", variable=self.continuous).grid(row=4, column=0, columnspan=2)
+
+        # Buttons for plotting sine and cosine waves
+        tk.Button(root, text="Plot Sine Wave", command=self.plot_sine).grid(row=5, column=0)
+        tk.Button(root, text="Plot Cosine Wave", command=self.plot_cosine).grid(row=5, column=1)
+
+        # Create a Matplotlib figure and canvas for plotting
+        self.fig, self.ax = plt.subplots()
+        self.canvas = FigureCanvasTkAgg(self.fig, master=root)
+        self.canvas.get_tk_widget().grid(row=6, column=0, columnspan=2)
+
+def create_signal_processing_tab(self, root):
+        # Read First Signal Button
+        self.read_signal_one_button = tk.Button(root, text="Read Signal 1", command=self.read_signal_one) # button
+        self.read_signal_one_button.pack()
+
+        # Read Second Signal Button
+        self.read_signal_two_button = tk.Button(root, text="Read Signal 2", command=self.read_signal_two) # button
+        self.read_signal_two_button.pack()
+
+
+        # Add Signal
+        self.add_signal_button = tk.Button(root, text="Add Signal", command=self.add_signal) # button
+        self.add_signal_button.pack()
+
+        # Subtract Signal
+        self.subtract_signal_button = tk.Button(root, text="Subtract Signal", command=self.subtract_signal) # button
+        self.subtract_signal_button.pack()
+
+        # Multiply Signal
+        self.multiply_signal_label = tk.Label(root, text="Multiply Signal") # label
+        self.multiply_signal_label.pack()
+        self.multiply_signal_entry = tk.Entry(root) # entry
+        self.multiply_signal_entry.pack()
+        self.multiply_signal_button = tk.Button(root, text="Multiply", command=self.multiply_signal) # button
+        self.multiply_signal_button.pack()
+
+        # Shift Signal
+        self.shift_signal_label = tk.Label(root, text="Shift Signal") # label
+        self.shift_signal_label.pack()
+        self.shift_signal_entry = tk.Entry(root) # entry
+        self.shift_signal_entry.pack()
+        self.shift_signal_button = tk.Button(root, text="Shift", command=self.shift_signal) # button
+        self.shift_signal_button.pack()
+
+        # Reverse Signal
+        self.reverse_signal_button = tk.Button(root, text="Reverse Signal", command=self.reverse_signal) # button
+        self.reverse_signal_button.pack()
+
+        # Text widget for displaying the signal 1 text
+        self.signal_one_display_label = tk.Label(root, text="Result Signal 1");   # label
+        self.signal_one_display_label.pack()
+        self.signal_one_display_text = tk.Text(root, height=1, width=50)    # text
+        self.signal_one_display_text.pack()
+
+        # Text widget for displaying the signal 2 text
+        self.signal_two_display_label = tk.Label(root, text="Result Signal 2");   # label
+        self.signal_two_display_label.pack()
+        self.signal_two_display_text = tk.Text(root, height=1, width=50)    # text
+        self.signal_two_display_text.pack()
+
+        # Text widget for displaying the signal result text
+        self.signal_result_display_label = tk.Label(root, text="Result Signal");   # label
+        self.signal_result_display_label.pack()
+        self.signal_result_display_text = tk.Text(root, height=1, width=50)    # text
+        self.signal_result_display_text.pack()
+
+        # Display Signal 1 plot
+        self.display_one_signal_button = tk.Button(root, text="Display Signal 1", command=self.display_signal_one) # button
+        self.display_one_signal_button.pack()
+
+        # Display Signal 2 plot
+        self.display_signal_two_button = tk.Button(root, text="Display Signal 2", command=self.display_signal_two) # button
+        self.display_signal_two_button.pack()
+
+        # Display Signal result plot
+        self.display_signal_result_button = tk.Button(root, text="Display Signal result", command=self.display_signal_result) # button
+        self.display_signal_result_button.pack()
+
+        # Canvas for Matplotlib Figure to show signla plot
+        self.canvas = None
+
+        # Current used signals
+        self.current_indices_one = [] 
+        self.current_samples_one = []
+
+        self.current_indices_two = []
+        self.current_samples_two = [] 
+
+        self.current_indices_result = []
+        self.current_samples_result = []

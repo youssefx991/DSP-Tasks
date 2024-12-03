@@ -16,7 +16,7 @@ print('Current Working directory:', os.getcwd())
 
 # %%
 
-def ReadSignalFile(file_name):
+def ReadSignalFile(file_name, opt=1):
     expected_indices=[]
     expected_samples=[]
     with open(file_name, 'r') as f:
@@ -29,8 +29,8 @@ def ReadSignalFile(file_name):
             L=line.strip()
             if len(L.split(' '))==2:
                 L=line.split(' ')
-                V1=int(L[0])
-                V2=float(L[1])
+                V1=int(L[0]) if opt==1 else float(L[0])
+                V2=float(L[1]) if opt==1 else float(L[1])
                 expected_indices.append(V1)
                 expected_samples.append(V2)
                 line = f.readline()
