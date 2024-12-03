@@ -89,10 +89,7 @@ class DSPApp:
         tk.Button(root, text="Display Signal result", command=self.display_signal_result).pack()
 
         # plot freq and amplitude Button
-        tk.Button(root, text="Plot freq&amplitude", command=lambda: plot_freq_amplitude(self)).pack() # button
-
-        # plot freq and phase Button
-        tk.Button(root, text="Plot freq&phase", command=lambda: plot_freq_amplitude(self)).pack() # button
+        tk.Button(root, text="Plot Frequency", command=lambda: plot_frequency(self)).pack() # button
         
         # variables
         self.dft_real = []

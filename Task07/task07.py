@@ -1,5 +1,6 @@
 import numpy as np
 from Task07.TestCases import *
+import matplotlib.pyplot as plt
 
 def DFT(gui):
     indices = gui.current_indices_one
@@ -22,6 +23,7 @@ def IDFT(gui):
         imag.append(amplitude * np.sin(theta))
         
     gui.idft_indices, gui.idft_samples = perform_idft(real, imag)
+    gui.current_indices_result, gui.current_samples_result = gui.idft_indices, gui.idft_samples
     
     print("dft_real = ", gui.dft_real)
     print("dft_imag = ", gui.dft_imag)
@@ -70,3 +72,34 @@ def perform_idft(real, imag):
         result_samples.append(sum_real / length)
     
     return result_indices, result_samples
+
+
+def plot_frequency(gui):
+    
+    real = gui.dft_real
+    amplitudes = gui.dft_amp
+    phases = gui.dft_phase
+    fs = int(gui.fs_txb.get())
+    
+    # Frequency axis
+    n = len(real) # anyone will work, all have same length
+    freqs = [(fs / n) * k for k in range(n)]
+
+    # Plot Frequency vs Amplitude
+    plt.figure(figsize=(10, 5))
+    plt.subplot(1, 2, 1)
+    plt.stem(freqs, amplitudes)
+    plt.title("Frequency vs Amplitude")
+    plt.xlabel("Frequency (Hz)")
+    plt.ylabel("Amplitude")
+    
+    # Plot Frequency vs Phase
+    plt.subplot(1, 2, 2)
+    plt.stem(freqs, phases)
+    plt.title("Frequency vs Phase")
+    plt.xlabel("Frequency (Hz)")
+    plt.ylabel("Phase (Radians)")
+    
+    plt.tight_layout()
+    plt.show()
+    
