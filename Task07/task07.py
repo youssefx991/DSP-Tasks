@@ -79,9 +79,9 @@ def perform_dft(indices, samples):
         sum_real = 0
         sum_imaginary = 0
         for n in range(length):
-            theta = (-2 * np.pi * k * n) / length
+            theta = (2 * np.pi * k * n) / length
             sum_real += samples[n] * np.cos(theta)
-            sum_imaginary += samples[n] * np.sin(theta)
+            sum_imaginary -= samples[n] * np.sin(theta)
         dft_real.append(sum_real)
         dft_imaginary.append(sum_imaginary)
     
