@@ -36,6 +36,7 @@ def DFT(gui):
     indices = gui.current_indices_one
     samples = gui.current_samples_one
     gui.dft_real, gui.dft_imag, gui.dft_amp, gui.dft_phase = perform_dft(indices, samples)
+    gui.current_indices_result, gui.current_samples_result = gui.dft_amp, gui.dft_phase
     gui.display_signal_result_text(gui.dft_amp, gui.dft_phase, 2)
     print("dft_real = ", gui.dft_real)
     print("dft_imag = ", gui.dft_imag)
@@ -55,6 +56,8 @@ def IDFT(gui):
         
     gui.idft_indices, gui.idft_samples = perform_idft(real, imag)
     gui.current_indices_result, gui.current_samples_result = gui.idft_indices, gui.idft_samples
+    gui.dft_amp = amplitudes
+    gui.dft_phase = phases
     gui.display_signal_result_text(gui.current_indices_result, gui.current_samples_result, 1)
     
     print("dft_real = ", gui.dft_real)
@@ -114,7 +117,7 @@ def plot_frequency(gui):
     fs = int(gui.fs_txb.get())
     
     # Frequency axis
-    n = len(real) # anyone will work, all have same length
+    n = max( len(real), len(amplitudes), len(phases))
     freqs = [(fs / n) * k for k in range(n)]
 
     # Plot Frequency vs Amplitude
