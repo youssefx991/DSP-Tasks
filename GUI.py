@@ -10,6 +10,8 @@ from Task03.Test_2.QuanTest2 import *
 from Task05.testcases.Task05_test import *
 from Task07.task07 import *
 from Task07.TestCases import *
+from Task_Practical.Correlation.correlation import *
+
 import numpy as np
 
 class DSPApp:
@@ -40,6 +42,10 @@ class DSPApp:
         # Task 7: DFT
         self.dft_frame = ttk.Frame(self.notebook)
         self.notebook.add(self.dft_frame, text="DFT")
+        
+        # Practical: Correlation
+        self.corr_frame = ttk.Frame(self.notebook)
+        self.notebook.add(self.corr_frame, text="Correlation")
 
         # Assign functions for creating tabs
         self.create_signal_processing_tab(self.signal_processing_frame)
@@ -47,7 +53,68 @@ class DSPApp:
         self.create_signal_quantization_tab(self.signal_quantize_frame)
         self.create_signal_conv_tab(self.signal_conv_frame)
         self.create_signal_dft_tab(self.dft_frame)
+        self.create_signal_corr_tab(self.corr_frame)
 
+    # ====================== Practical - Correlation =================================================================
+    def create_signal_corr_tab(self, root):
+        # Read First Signal Button
+        tk.Button(root, text="Read Signal 1", command=self.read_signal_one).pack()
+        
+        # Read Second Signal Button
+        tk.Button(root, text="Read Signal 2", command=self.read_signal_two).pack()
+        
+        # Read Sampling Frequency
+        tk.Label(root, text="Sampling Frequency").pack()
+        self.fs_txb = tk.Entry(root)
+        self.fs_txb.pack()
+        
+        # Text widget for displaying the signal 1 text
+        tk.Label(root, text="Result Signal 1").pack()
+        self.signal_one_display_text = tk.Text(root, height=3, width=75)
+        self.signal_one_display_text.pack()
+
+        # Text widget for displaying the signal 2 text
+        tk.Label(root, text="Result Signal 2").pack()
+        self.signal_two_display_text = tk.Text(root, height=3, width=75)
+        self.signal_two_display_text.pack()
+
+        # Text widget for displaying the signal result text
+        tk.Label(root, text="Result Signal").pack()
+        self.signal_result_display_text = tk.Text(root, height=3, width=75)
+        self.signal_result_display_text.pack()
+        
+        # Text widget for displaying the Time Delay text
+        tk.Label(root, text="Time Delay").pack()
+        self.signal_time_delay = tk.Text(root, height=3, width=75)
+        self.signal_time_delay.pack()
+        
+        # Text widget for displaying the Signal Class text
+        tk.Label(root, text="Signal Class").pack()
+        self.signal_signal_class = tk.Text(root, height=3, width=75)
+        self.signal_signal_class.pack()
+
+        # Correlation Button
+        tk.Button(root, text="Perform Correlation", command=lambda: correlation(self)).pack()
+        
+        # Time Delay Button
+        tk.Button(root, text="Calculate Time Delay", command=lambda: time_delay(self)).pack()
+        
+        # Class Button
+        tk.Button(root, text="Determine_class", command=lambda: signal_class(self)).pack()
+        
+        # Display Signal 1 plot
+        tk.Button(root, text="Display Signal 1", command=self.display_signal_one).pack()
+
+        # Display Signal 2 plot
+        tk.Button(root, text="Display Signal 2", command=self.display_signal_two).pack()
+
+        # Display Signal result plot
+        tk.Button(root, text="Display Signal result", command=self.display_signal_result).pack()
+        
+        self.time_delay = []
+        self.signal_class = None
+
+    
     # ====================== Task 07 =================================================================
     
     def create_signal_dft_tab(self, root):
