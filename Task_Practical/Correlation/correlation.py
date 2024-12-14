@@ -22,7 +22,18 @@ def correlation(gui):
     Compare_Signals("CorrOutput.txt", gui.current_indices_result, gui.current_samples_result)
 
 def time_delay(gui):
-    pass
+    indices = gui.current_indices_result
+    samples = gui.current_samples_result
+    fs = int(gui.fs_txb.get())
+    ts = 1/fs
+    max_corr_val = max(samples, key=abs)
+    max_corr_idx = samples.index(max_corr_val)
+    
+    gui.time_delay = max_corr_idx * ts
+    gui.signal_time_delay.delete('1.0', 'end')  # Clear the previous content
+    gui.signal_time_delay.insert('1.0', f"Time Delay: {gui.time_delay} seconds")
+    
 
 def signal_class(gui):
     pass
+
