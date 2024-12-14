@@ -10,6 +10,8 @@ def correlation(gui):
     gui.current_indices_result, gui.current_samples_result = gui.current_indices_one, result_samples
     gui.display_signal_result_text(gui.current_indices_result, gui.current_samples_result, 1)
     Compare_Signals("CorrOutput.txt", gui.current_indices_result, gui.current_samples_result)
+    
+    time_delay(gui)
 
 def perform_corr(samples_one, samples_two):
     n = len(samples_one)
@@ -33,15 +35,17 @@ def time_delay(gui):
     indices = gui.current_indices_result
     samples = gui.current_samples_result
     fs = int(gui.fs_txb.get())
-    ts = 1/fs
-    max_corr_val = max(samples, key=abs)
-    max_corr_idx = samples.index(max_corr_val)
-    
-    gui.time_delay = max_corr_idx * ts
+    gui.time_delay = get_time_delay(samples, fs)
     gui.signal_time_delay.delete('1.0', 'end')  # Clear the previous content
     gui.signal_time_delay.insert('1.0', f"Time Delay: {gui.time_delay} seconds")
     
-
+def get_time_delay(samples, fs):
+    ts = 1/fs
+    max_corr_val = max(samples, key=abs)
+    max_corr_idx = samples.index(max_corr_val)
+    time_delay = max_corr_idx * ts
+    return time_delay
+    
 def signal_class(gui):
     file_path = filedialog.askopenfilename(filetypes=[("Text Files", "*.txt")])
     if file_path:
@@ -72,10 +76,10 @@ def signal_class(gui):
     
     if down_avg >= up_avg:
         gui.signal_signal_class.delete('1.0', 'end')  # Clear the previous content
-        gui.signal_signal_class.insert('1.0', f"Class 1")
+        gui.signal_signal_class.insert('1.0', f"Class 1 (A) - Down")
     else:
         gui.signal_signal_class.delete('1.0', 'end')  # Clear the previous content
-        gui.signal_signal_class.insert('1.0', f"Class 2")
+        gui.signal_signal_class.insert('1.0', f"Class 2 (B) - Up")
     
 
 def read_lines(file_name):
