@@ -67,6 +67,7 @@ class DSPApp:
         tk.Label(root, text="Sampling Frequency").pack()
         self.fs_txb = tk.Entry(root)
         self.fs_txb.pack()
+        self.fs_txb.insert(0, "100")
         
         # Text widget for displaying the signal 1 text
         tk.Label(root, text="Result Signal 1").pack()
