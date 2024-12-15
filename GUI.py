@@ -155,14 +155,24 @@ class DSPApp:
         # self.test_file = "HPFCoefficients.txt"
         
         # Test Case 5
-        self.display_opt.set("band_pass")
+        # self.display_opt.set("band_pass")
+        # self.fs_txb.insert(0, "1000")
+        # self.step_attenuation_txb.insert(0, "60")
+        # self.fc1_txb.insert(0, "150")
+        # self.fc2_txb.insert(0, "250")
+        # self.tansition_width_txb.insert(0, "50")
+        # self.fc_txb.insert(0, "1500")
+        # self.test_file = "BPFCoefficients.txt"
+        
+        # Test Case 7
+        self.display_opt.set("band_stop")
         self.fs_txb.insert(0, "1000")
         self.step_attenuation_txb.insert(0, "60")
         self.fc1_txb.insert(0, "150")
         self.fc2_txb.insert(0, "250")
         self.tansition_width_txb.insert(0, "50")
         self.fc_txb.insert(0, "1500")
-        self.test_file = "BPFCoefficients.txt"
+        self.test_file = "BSFCoefficients.txt"
         
         
         

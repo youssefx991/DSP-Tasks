@@ -60,6 +60,11 @@ def create_filter(gui):
         fc2_norm = (fc2 + (transition_width/2))/fs
         print("fc1_norm = ", fc1_norm)
         print("fc2_norm = ", fc2_norm)
+    elif filter_type == "band_stop":
+        fc1_norm = (fc1 + (transition_width/2))/fs
+        fc2_norm = (fc2 - (transition_width/2))/fs
+        print("fc1_norm = ", fc1_norm)
+        print("fc2_norm = ", fc2_norm)
         
     
     
@@ -110,16 +115,18 @@ def create_filter(gui):
                 value = value1 - value2
                 h.append(value)
 
-        # elif filter_type == "band_stop":
-        #     fc1_norm = fc1 / fs
-        #     fc2_norm = fc2 / fs
-        #     if n == 0:
-        #         h.append(1 - 2 * (fc2_norm - fc1_norm))
-        #     else:
-        #         h.append(
-        #             (np.sin(2 * np.pi * fc1_norm * (n - M)) - np.sin(2 * np.pi * fc2_norm * (n - M)))
-        #             / (np.pi * (n - M))
-        #         )
+        elif filter_type == "band_stop":
+            if n == 0:
+                h.append(1 - 2 * (fc2_norm - fc1_norm))
+            else:
+                up1 = np.sin(n * 2 * np.pi * fc1_norm)
+                down1 = np.pi * n
+                value1 = up1/down1
+                up2 = np.sin(n * 2 * np.pi * fc2_norm)
+                down2 = np.pi * n
+                value2 = up2/down2
+                value = value1 - value2
+                h.append(value)
 
         # else:
         #     print("Invalid filter type")
