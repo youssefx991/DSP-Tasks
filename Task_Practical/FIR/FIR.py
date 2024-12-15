@@ -47,8 +47,12 @@ def create_filter(gui):
     print("fc = ", fc)
     print("transition_width = ", transition_width)
     print("fs = ", fs)
-    fc_norm = (fc + (transition_width/2))/fs
     
+    if filter_type == "low_pass":
+        fc_norm = (fc + (transition_width/2))/fs
+    elif filter_type == "high_pass":
+        fc_norm = (fc - (transition_width/2))/fs
+        
     print("fc_norm = ", fc_norm)
     
     for n in range(N_end+1):
@@ -63,18 +67,27 @@ def create_filter(gui):
                 down = np.pi * n
                 value = up/down
                 h.append(value)
+                print("low pass")
                 print("n = ", n)
                 print("up = ", up)
                 print("down = ", down)
                 print("value = ", value)
                 print("==========================================")
 
-        # elif filter_type == "high_pass":
-        #     fc_norm = fc / fs
-        #     if n == 0:
-        #         h.append(1 - 2 * fc_norm)
-        #     else:
-        #         h.append(-np.sin(2 * np.pi * fc_norm * (n - M)) / (np.pi * (n - M)))
+        elif filter_type == "high_pass":
+            if n == 0:
+                h.append(1 - 2 * fc_norm)
+            else:
+                up = -1 * np.sin(n * 2 * np.pi * fc_norm)
+                down = np.pi * n
+                value = up/down
+                h.append(value)
+                print("high pass")
+                print("n = ", n)
+                print("up = ", up)
+                print("down = ", down)
+                print("value = ", value)
+                print("==========================================")
 
         # elif filter_type == "band_pass":
         #     fc1_norm = fc1 / fs
@@ -134,7 +147,8 @@ def create_filter(gui):
     print("indices = ", indices)
     print("samples = ", samples)
     
-    Compare_Signals("LPFCoefficients.txt", indices, samples)
+    # Compare_Signals("LPFCoefficients.txt", indices, samples)
+    Compare_Signals("HPFCoefficients.txt", indices, samples)
 
 
 # Windows
@@ -145,4 +159,4 @@ def hanning_window(N):
 def hamming_window(N):
     return [0.54 + 0.46 * np.cos((2*np.pi*n)/(2*N - 1)) for n in range(N)]
 def blackman_window(N):
-    return [0.42 + 0.5 * np.cos((2*np.pi*n)/(N-1)) + 0.08*np.cos((4*np.pi*n)/(N-1)) for n in range(N)]
+    return [0.42 + 0.5 * np.cos((2*np.pi*n)/(53-1)) + 0.08*np.cos((4*np.pi*n)/(53-1)) for n in range(N)]

@@ -68,7 +68,7 @@ class DSPApp:
         
         # Filters Radio Buttons
         tk.Label(root, text="Choose Filter Type").pack()
-        self.display_opt = tk.StringVar(value="low_pass")
+        self.display_opt = tk.StringVar(value="high_pass")
         self.high_pass_radio = tk.Radiobutton(root, text="High Pass", variable=self.display_opt, value="high_pass").pack()
         self.low_pass_radio = tk.Radiobutton(root, text="Low Pass", variable=self.display_opt, value="low_pass").pack()
         self.band_pass_radio = tk.Radiobutton(root, text="Band Pass", variable=self.display_opt, value="band_pass").pack()
@@ -103,7 +103,7 @@ class DSPApp:
         tk.Label(root, text="Step Attenuation").pack()
         self.step_attenuation_txb = tk.Entry(root)
         self.step_attenuation_txb.pack()
-        self.step_attenuation_txb.insert(0, "50")
+        self.step_attenuation_txb.insert(0, "70")
         
         # Read Transition Width
         tk.Label(root, text="Tansition Width").pack()
