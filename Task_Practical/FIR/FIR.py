@@ -155,8 +155,11 @@ def create_filter(gui):
 def rectangular_window(N):
     return [1 for _ in range(N)]
 def hanning_window(N):
-    return [0.5 + 0.5 * np.cos((2*np.pi*n)/(2*N - 1)) for n in range(N)]
+    total_N = (2*N - 1)
+    return [0.5 + 0.5 * np.cos((2*np.pi*n)/total_N) for n in range(N)]
 def hamming_window(N):
-    return [0.54 + 0.46 * np.cos((2*np.pi*n)/(2*N - 1)) for n in range(N)]
+    total_N = (2*N - 1)
+    return [0.54 + 0.46 * np.cos((2*np.pi*n)/total_N) for n in range(N)]
 def blackman_window(N):
-    return [0.42 + 0.5 * np.cos((2*np.pi*n)/(53-1)) + 0.08*np.cos((4*np.pi*n)/(53-1)) for n in range(N)]
+    total_N = (2*N - 1)
+    return [0.42 + 0.5 * np.cos((2*np.pi*n)/(total_N-1)) + 0.08*np.cos((4*np.pi*n)/(total_N-1)) for n in range(N)]
