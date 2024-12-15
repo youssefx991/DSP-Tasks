@@ -79,37 +79,33 @@ class DSPApp:
         tk.Label(root, text="Sampling Frequency").pack()
         self.fs_txb = tk.Entry(root)
         self.fs_txb.pack()
-        self.fs_txb.insert(0, "8000")
+        
         
         # Read Cut Frequency
         tk.Label(root, text="Cut Frequency").pack()
         self.fc_txb = tk.Entry(root)
         self.fc_txb.pack()
-        self.fc_txb.insert(0, "1500")
         
         # Read First Frequency
         tk.Label(root, text="First Frequency").pack()
         self.fc1_txb = tk.Entry(root)
         self.fc1_txb.pack()
-        self.fc1_txb.insert(0, "100")
         
         # Read Second Frequency
         tk.Label(root, text="Second Frequency").pack()
         self.fc2_txb = tk.Entry(root)
         self.fc2_txb.pack()
-        self.fc2_txb.insert(0, "100")
         
         # Read Step Attenuation
         tk.Label(root, text="Step Attenuation").pack()
         self.step_attenuation_txb = tk.Entry(root)
         self.step_attenuation_txb.pack()
-        self.step_attenuation_txb.insert(0, "70")
         
         # Read Transition Width
         tk.Label(root, text="Tansition Width").pack()
         self.tansition_width_txb = tk.Entry(root)
         self.tansition_width_txb.pack()
-        self.tansition_width_txb.insert(0, "500")
+        
         
         # Text widget for displaying the signal 1 text
         tk.Label(root, text="Result Signal 1").pack()
@@ -137,6 +133,29 @@ class DSPApp:
         self.step_attenuation = None
         self.transition_width = None
         self.filter_type = None
+        
+        # Test Case 1
+        self.display_opt.set("low_pass")
+        self.fs_txb.insert(0, "8000")
+        self.step_attenuation_txb.insert(0, "50")
+        self.fc_txb.insert(0, "1500")
+        self.tansition_width_txb.insert(0, "500")
+        self.fc2_txb.insert(0, "100")
+        self.fc1_txb.insert(0, "100")
+        self.test_file = "LPFCoefficients.txt"
+        
+        # Test Case 3
+        # self.display_opt.set("high_pass")
+        # self.fs_txb.insert(0, "8000")
+        # self.step_attenuation_txb.insert(0, "70")
+        # self.fc_txb.insert(0, "1500")
+        # self.tansition_width_txb.insert(0, "500")
+        # self.fc2_txb.insert(0, "100")
+        # self.fc1_txb.insert(0, "100")
+        # self.test_file = "HPFCoefficients.txt"
+        
+        
+        
         
     
     # ====================== Practical - Correlation =================================================================

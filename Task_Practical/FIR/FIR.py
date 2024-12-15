@@ -9,6 +9,7 @@ def create_filter(gui):
     step_attenution = float(gui.step_attenuation_txb.get())
     transition_width = float(gui.tansition_width_txb.get())
     filter_type = gui.display_opt.get()
+    test_file = gui.test_file
     
     gui.fs = fs 
     gui.fc = fc
@@ -147,8 +148,7 @@ def create_filter(gui):
     print("indices = ", indices)
     print("samples = ", samples)
     
-    # Compare_Signals("LPFCoefficients.txt", indices, samples)
-    Compare_Signals("HPFCoefficients.txt", indices, samples)
+    Compare_Signals(test_file, indices, samples)
 
 
 # Windows
