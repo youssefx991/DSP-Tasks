@@ -11,6 +11,7 @@ from Task05.testcases.Task05_test import *
 from Task07.task07 import *
 from Task07.TestCases import *
 from Task_Practical.Correlation.correlation import *
+from Task_Practical.FIR.FIR import *
 
 import numpy as np
 
@@ -46,6 +47,10 @@ class DSPApp:
         # Practical: Correlation
         self.corr_frame = ttk.Frame(self.notebook)
         self.notebook.add(self.corr_frame, text="Correlation")
+        
+        # Practical: FIR
+        self.fir_frame = ttk.Frame(self.notebook)
+        self.notebook.add(self.fir_frame, text="FIR")
 
         # Assign functions for creating tabs
         self.create_signal_processing_tab(self.signal_processing_frame)
@@ -54,7 +59,86 @@ class DSPApp:
         self.create_signal_conv_tab(self.signal_conv_frame)
         self.create_signal_dft_tab(self.dft_frame)
         self.create_signal_corr_tab(self.corr_frame)
+        self.create_signal_fir_tab(self.fir_frame)
 
+    # ====================== Practical - Correlation =================================================================
+    def create_signal_fir_tab(self, root):
+        # Read Signal Button
+        tk.Button(root, text="Read Signal", command=self.read_signal_one).pack()
+        
+        # Filters Radio Buttons
+        tk.Label(root, text="Choose Filter Type").pack()
+        self.display_opt = tk.StringVar(value="low_pass")
+        self.high_pass_radio = tk.Radiobutton(root, text="High Pass", variable=self.display_opt, value="high_pass").pack()
+        self.low_pass_radio = tk.Radiobutton(root, text="Low Pass", variable=self.display_opt, value="low_pass").pack()
+        self.band_pass_radio = tk.Radiobutton(root, text="Band Pass", variable=self.display_opt, value="band_pass").pack()
+        self.band_stop_radio = tk.Radiobutton(root, text="Band Stop", variable=self.display_opt, value="band_stop").pack()
+        
+        
+        # Read Sampling Frequency
+        tk.Label(root, text="Sampling Frequency").pack()
+        self.fs_txb = tk.Entry(root)
+        self.fs_txb.pack()
+        self.fs_txb.insert(0, "8000")
+        
+        # Read Cut Frequency
+        tk.Label(root, text="Cut Frequency").pack()
+        self.fc_txb = tk.Entry(root)
+        self.fc_txb.pack()
+        self.fc_txb.insert(0, "1500")
+        
+        # Read First Frequency
+        tk.Label(root, text="First Frequency").pack()
+        self.fc1_txb = tk.Entry(root)
+        self.fc1_txb.pack()
+        self.fc1_txb.insert(0, "100")
+        
+        # Read Second Frequency
+        tk.Label(root, text="Second Frequency").pack()
+        self.fc2_txb = tk.Entry(root)
+        self.fc2_txb.pack()
+        self.fc2_txb.insert(0, "100")
+        
+        # Read Step Attenuation
+        tk.Label(root, text="Step Attenuation").pack()
+        self.step_attenuation_txb = tk.Entry(root)
+        self.step_attenuation_txb.pack()
+        self.step_attenuation_txb.insert(0, "50")
+        
+        # Read Transition Width
+        tk.Label(root, text="Tansition Width").pack()
+        self.tansition_width_txb = tk.Entry(root)
+        self.tansition_width_txb.pack()
+        self.tansition_width_txb.insert(0, "500")
+        
+        # Text widget for displaying the signal 1 text
+        tk.Label(root, text="Result Signal 1").pack()
+        self.signal_one_display_text = tk.Text(root, height=3, width=75)
+        self.signal_one_display_text.pack()
+        
+        # Text widget for displaying the signal result text
+        tk.Label(root, text="Result Signal").pack()
+        self.signal_result_display_text = tk.Text(root, height=3, width=75)
+        self.signal_result_display_text.pack()
+
+        # Create Filter Button
+        tk.Button(root, text="Create Filter", command=lambda: create_filter(self)).pack()
+        
+        # Display Signal plot
+        tk.Button(root, text="Display Read Signal", command=self.display_signal_one).pack()
+
+        # Display Signal result plot
+        tk.Button(root, text="Display Signal result", command=self.display_signal_result).pack()
+        
+        self.fs = None
+        self.fc = None
+        self.fc1 = None
+        self.fc2 = None
+        self.step_attenuation = None
+        self.transition_width = None
+        self.filter_type = None
+        
+    
     # ====================== Practical - Correlation =================================================================
     def create_signal_corr_tab(self, root):
         # Read First Signal Button
