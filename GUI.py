@@ -144,6 +144,16 @@ class DSPApp:
         # self.fc1_txb.insert(0, "100")
         # self.test_file = "LPFCoefficients.txt"
         
+        # Test Case 2
+        self.display_opt.set("low_pass")
+        self.fs_txb.insert(0, "8000")
+        self.step_attenuation_txb.insert(0, "50")
+        self.fc_txb.insert(0, "1500")
+        self.tansition_width_txb.insert(0, "500")
+        self.fc2_txb.insert(0, "100")
+        self.fc1_txb.insert(0, "100")
+        self.test_file = "ecg_low_pass_filtered.txt"
+        
         # Test Case 3
         # self.display_opt.set("high_pass")
         # self.fs_txb.insert(0, "8000")
@@ -165,14 +175,14 @@ class DSPApp:
         # self.test_file = "BPFCoefficients.txt"
         
         # Test Case 7
-        self.display_opt.set("band_stop")
-        self.fs_txb.insert(0, "1000")
-        self.step_attenuation_txb.insert(0, "60")
-        self.fc1_txb.insert(0, "150")
-        self.fc2_txb.insert(0, "250")
-        self.tansition_width_txb.insert(0, "50")
-        self.fc_txb.insert(0, "1500")
-        self.test_file = "BSFCoefficients.txt"
+        # self.display_opt.set("band_stop")
+        # self.fs_txb.insert(0, "1000")
+        # self.step_attenuation_txb.insert(0, "60")
+        # self.fc1_txb.insert(0, "150")
+        # self.fc2_txb.insert(0, "250")
+        # self.tansition_width_txb.insert(0, "50")
+        # self.fc_txb.insert(0, "1500")
+        # self.test_file = "BSFCoefficients.txt"
         
         
         

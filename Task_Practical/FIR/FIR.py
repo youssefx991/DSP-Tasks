@@ -165,7 +165,41 @@ def create_filter(gui):
     print("samples = ", samples)
     
     Compare_Signals(test_file, indices, samples)
+    
+    if gui.current_indices_one and gui.current_samples_one:
+        indices_one = gui.current_indices_one
+        samples_one = gui.current_samples_one
+        indices_two = indices
+        samples_two = samples
+        
+        indices_conv, samples_conv = perform_conv(indices_one, samples_one, indices_two, samples_two)
+        gui.current_indices_result, gui.current_samples_result = indices_conv, samples_conv
+        gui.display_signal_result_text(gui.current_indices_result, gui.current_samples_result)
+        Compare_Signals(test_file, indices_conv, samples_conv)
+        
+        
+        
+        
 
+def perform_conv(indices_one, samples_one, indices_two, samples_two):
+    indices_conv = []
+    samples_conv = []
+    
+    len_one = len(samples_one)
+    len_two = len(samples_two)
+    len_conv = (len_one + len_two - 1)
+    
+    samples_conv = [0] * len_conv
+    first_index_conv = indices_one[0] + indices_two[0]
+    last_index_conv = indices_one[len_one - 1] + indices_two[len_two -1]
+    indices_conv = list(range(first_index_conv, last_index_conv + 1))
+    
+    for n in range(len_conv):
+        for m in range(len_one):
+            if 0 <= n - m < len_two:
+                samples_conv[n] += samples_one[m] * samples_two[n - m]
+                
+    return indices_conv, samples_conv
 
 # Windows
 def rectangular_window(N):
