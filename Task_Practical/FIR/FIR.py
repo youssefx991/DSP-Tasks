@@ -171,6 +171,7 @@ def create_filter(gui):
         indices_two = indices
         samples_two = samples
         
+        
         indices_conv, samples_conv = perform_conv(indices_one, samples_one, indices_two, samples_two)
         gui.current_indices_result, gui.current_samples_result = indices_conv, samples_conv
         gui.display_signal_result_text(gui.current_indices_result, gui.current_samples_result)
@@ -179,19 +180,52 @@ def create_filter(gui):
         Compare_Signals(test_file, indices_conv, samples_conv)
         print("==========================================")
         
-        dft_real_one, dft_imaginary_one, dft_amplitude_one, dft_phase_one = perform_dft(indices_one, samples_one)
-        dft_real_two, dft_imaginary_two, dft_amplitude_two, dft_phase_two = perform_dft(indices_two, samples_two)
+        # Calculate the target length
+        target_length = len(samples_one) + len(samples_two) - 1
+
+        # Zero-pad signal and filter
+        padded_samples_one = zero_pad(samples_one, target_length)
+        padded_samples_two = zero_pad(samples_two, target_length)
         
-        dft_real_result = [dft_real_one[i] * dft_real_two[i] for i in range(len(dft_real_two))]
-        dft_imaginary_result = [dft_imaginary_one[i] * dft_imaginary_two[i] for i in range(len(dft_imaginary_two))]
+        # Perform DFT on zero-padded signals
+        dft_real_one, dft_imaginary_one, dft_amplitude_one, dft_phase_one = perform_dft(indices_one, padded_samples_one)
+        dft_real_two, dft_imaginary_two, dft_amplitude_two, dft_phase_two = perform_dft(indices_two, padded_samples_two)
         
+        # print("len of indices = ", len(indices_one))
+        # print("len of samples = ", len(samples_one))
+        # print("len of dft_real_one = ", len(dft_real_one))
+        # print("len of dft_imaginary_one = ", len(dft_imaginary_one))
+        # print("len of dft_real_two = ", len(dft_real_two))
+        # print("len of dft_imaginary_two = ", len(dft_imaginary_two))
+        
+        dft_real_result = []
+        dft_imaginary_result = []
+        for i in range(len(dft_real_one)):
+            real_part = dft_real_one[i] * dft_real_two[i] - dft_imaginary_one[i] * dft_imaginary_two[i]
+            imaginary_part = dft_real_one[i] * dft_imaginary_two[i] + dft_imaginary_one[i] * dft_real_two[i]
+            dft_real_result.append(real_part)
+            dft_imaginary_result.append(imaginary_part)
+        
+        # print("len of dft_real_result = ", len(dft_real_result))
+        # print("len of dft_imaginary_result = ", len(dft_imaginary_result))
+        
+        # Perform IDFT to get the result in the time domain
         result_indices, result_samples = perform_idft(dft_real_result, dft_imaginary_result)
+        
+        # Adjust result indices to reflect convolution start
+        result_indices = adjust_indices(len(samples_one), len(samples_two))
+        
         gui.current_indices_result, gui.current_samples_result = result_indices, result_samples
         gui.display_signal_result_text(gui.current_indices_result, gui.current_samples_result)
         
         print("==========================================")
         print("Testing Filtered Signal using Fourier")
-        Compare_Signals(test_file, indices_conv, samples_conv)
+        # print("len of indices = ", len(result_indices))
+        # print("len of Samples = ", len(result_samples))
+        # print("Indices = ", result_indices)
+        # print("Samples = ", result_samples)
+        Compare_Signals(test_file, result_indices, result_samples)
+        
         print("==========================================")
     else:
         print("==========================================")
@@ -234,3 +268,13 @@ def hamming_window(N):
 def blackman_window(N):
     total_N = (2*N - 1)
     return [0.42 + 0.5 * np.cos((2*np.pi*n)/(total_N-1)) + 0.08*np.cos((4*np.pi*n)/(total_N-1)) for n in range(N)]
+
+def zero_pad(signal, target_length):
+    padded_signal = signal + [0] * (target_length - len(signal))
+    return padded_signal
+
+# Adjust indices for the result
+def adjust_indices(signal_length, filter_length):
+    start_index = -(filter_length // 2)
+    end_index = signal_length + filter_length - 2 - (filter_length // 2)
+    return list(range(start_index, end_index + 1))
