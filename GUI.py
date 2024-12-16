@@ -61,7 +61,7 @@ class DSPApp:
         self.create_signal_corr_tab(self.corr_frame)
         self.create_signal_fir_tab(self.fir_frame)
 
-    # ====================== Practical - Correlation =================================================================
+    # ====================== Practical - FIR =================================================================
     def create_signal_fir_tab(self, root):
         # Read Signal Button
         tk.Button(root, text="Read Signal", command=self.read_signal_one).pack()
