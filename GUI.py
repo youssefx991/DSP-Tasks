@@ -205,14 +205,14 @@ class DSPApp:
         # self.test_file = "BSFCoefficients.txt"
         
         # Test Case 8
-        self.display_opt.set("band_stop")
-        self.fs_txb.insert(0, "1000")
-        self.step_attenuation_txb.insert(0, "60")
-        self.fc1_txb.insert(0, "150")
-        self.fc2_txb.insert(0, "250")
-        self.tansition_width_txb.insert(0, "50")
-        self.fc_txb.insert(0, "1500")
-        self.test_file = "ecg_band_stop_filtered.txt"
+        # self.display_opt.set("band_stop")
+        # self.fs_txb.insert(0, "1000")
+        # self.step_attenuation_txb.insert(0, "60")
+        # self.fc1_txb.insert(0, "150")
+        # self.fc2_txb.insert(0, "250")
+        # self.tansition_width_txb.insert(0, "50")
+        # self.fc_txb.insert(0, "1500")
+        # self.test_file = "ecg_band_stop_filtered.txt"
         
         
         

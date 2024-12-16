@@ -174,8 +174,10 @@ def create_filter(gui):
         indices_conv, samples_conv = perform_conv(indices_one, samples_one, indices_two, samples_two)
         gui.current_indices_result, gui.current_samples_result = indices_conv, samples_conv
         gui.display_signal_result_text(gui.current_indices_result, gui.current_samples_result)
+        print("==========================================")
         print("Testing Filtered Signal using Convolutional")
         Compare_Signals(test_file, indices_conv, samples_conv)
+        print("==========================================")
         
         dft_real_one, dft_imaginary_one, dft_amplitude_one, dft_phase_one = perform_dft(indices_one, samples_one)
         dft_real_two, dft_imaginary_two, dft_amplitude_two, dft_phase_two = perform_dft(indices_two, samples_two)
@@ -186,11 +188,16 @@ def create_filter(gui):
         result_indices, result_samples = perform_idft(dft_real_result, dft_imaginary_result)
         gui.current_indices_result, gui.current_samples_result = result_indices, result_samples
         gui.display_signal_result_text(gui.current_indices_result, gui.current_samples_result)
+        
+        print("==========================================")
         print("Testing Filtered Signal using Fourier")
         Compare_Signals(test_file, indices_conv, samples_conv)
+        print("==========================================")
     else:
+        print("==========================================")
         print("Testing Result Filter")
         Compare_Signals(test_file, indices, samples)
+        print("==========================================")
         
         
         
