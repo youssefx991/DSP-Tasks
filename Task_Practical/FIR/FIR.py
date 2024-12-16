@@ -1,4 +1,5 @@
 from Task_Practical.FIR.CompareSignal import *
+from Task07.task07 import *
 import numpy as np
 
 def create_filter(gui):
@@ -164,8 +165,6 @@ def create_filter(gui):
     print("indices = ", indices)
     print("samples = ", samples)
     
-    Compare_Signals(test_file, indices, samples)
-    
     if gui.current_indices_one and gui.current_samples_one:
         indices_one = gui.current_indices_one
         samples_one = gui.current_samples_one
@@ -175,8 +174,23 @@ def create_filter(gui):
         indices_conv, samples_conv = perform_conv(indices_one, samples_one, indices_two, samples_two)
         gui.current_indices_result, gui.current_samples_result = indices_conv, samples_conv
         gui.display_signal_result_text(gui.current_indices_result, gui.current_samples_result)
+        print("Testing Filtered Signal using Convolutional")
         Compare_Signals(test_file, indices_conv, samples_conv)
         
+        dft_real_one, dft_imaginary_one, dft_amplitude_one, dft_phase_one = perform_dft(indices_one, samples_one)
+        dft_real_two, dft_imaginary_two, dft_amplitude_two, dft_phase_two = perform_dft(indices_two, samples_two)
+        
+        dft_real_result = [dft_real_one[i] * dft_real_two[i] for i in range(len(dft_real_two))]
+        dft_imaginary_result = [dft_imaginary_one[i] * dft_imaginary_two[i] for i in range(len(dft_imaginary_two))]
+        
+        result_indices, result_samples = perform_idft(dft_real_result, dft_imaginary_result)
+        gui.current_indices_result, gui.current_samples_result = result_indices, result_samples
+        gui.display_signal_result_text(gui.current_indices_result, gui.current_samples_result)
+        print("Testing Filtered Signal using Fourier")
+        Compare_Signals(test_file, indices_conv, samples_conv)
+    else:
+        print("Testing Result Filter")
+        Compare_Signals(test_file, indices, samples)
         
         
         
