@@ -221,10 +221,10 @@ class DSPApp:
     # ====================== Practical - Correlation =================================================================
     def create_signal_corr_tab(self, root):
         # Read First Signal Button
-        tk.Button(root, text="Read Signal 1", command=self.read_signal_one).pack()
+        tk.Button(root, text="Read Signal 1", command=lambda: read_corr_signal_one(self)).pack()
         
         # Read Second Signal Button
-        tk.Button(root, text="Read Signal 2", command=self.read_signal_two).pack()
+        tk.Button(root, text="Read Signal 2", command=lambda: read_corr_signal_two(self)).pack()
         
         # Read Sampling Frequency
         tk.Label(root, text="Sampling Frequency").pack()
@@ -234,13 +234,13 @@ class DSPApp:
         
         # Text widget for displaying the signal 1 text
         tk.Label(root, text="Result Signal 1").pack()
-        self.signal_one_display_text = tk.Text(root, height=3, width=75)
-        self.signal_one_display_text.pack()
+        self.corr_signal_one_display_text = tk.Text(root, height=3, width=75)
+        self.corr_signal_one_display_text.pack()
 
         # Text widget for displaying the signal 2 text
         tk.Label(root, text="Result Signal 2").pack()
-        self.signal_two_display_text = tk.Text(root, height=3, width=75)
-        self.signal_two_display_text.pack()
+        self.corr_signal_two_display_text = tk.Text(root, height=3, width=75)
+        self.corr_signal_two_display_text.pack()
 
         # Text widget for displaying the signal result text
         tk.Label(root, text="Result Signal").pack()

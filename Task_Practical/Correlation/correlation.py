@@ -1,6 +1,7 @@
 from Task_Practical.Correlation.Correlation_Task_Files.Point1_Correlation.CompareSignal import *
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
+from Task01.Task1_testcases_and_testing_functions.DSP_Task2_TEST_functions import *
 
 def correlation(gui):
     samples_one = gui.current_samples_one
@@ -107,3 +108,26 @@ def read_lines(file_name):
         samples = [float(line.strip()) for line in f.readlines()]
     indices = list(range(len(samples)))
     return indices,samples
+
+def read_corr_signal_one(gui):
+    file_path = filedialog.askopenfilename(filetypes=[("Text Files", "*.txt")])
+    if file_path:
+        gui.current_indices_one, gui.current_samples_one = ReadSignalFile(file_path, 1)
+        
+        gui.corr_signal_one_display_text.delete(1.0, tk.END)
+        gui.corr_signal_one_display_text.insert(tk.END, f"Indices: {gui.current_indices_one}\nSamples: {gui.current_samples_one}\n")
+    else:
+        messagebox.showerror("ERROR in Reading Signal 1 - Only Text files are allowd")
+
+def read_corr_signal_two(gui):
+    file_path = filedialog.askopenfilename(filetypes=[("Text Files", "*.txt")])
+    if file_path:
+        gui.current_indices_two, gui.current_samples_two = ReadSignalFile(file_path, 1)
+        
+        gui.corr_signal_two_display_text.delete(1.0, tk.END)
+        gui.corr_signal_two_display_text.insert(tk.END, f"Indices: {gui.current_indices_two}\nSamples: {gui.current_samples_two}\n")
+    else:
+        messagebox.showerror("ERROR in Reading Signal 1 - Only Text files are allowd")
+    
+
+    
