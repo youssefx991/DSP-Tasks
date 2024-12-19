@@ -645,9 +645,9 @@ class DSPApp:
 
     def create_signal_generation_tab(self, root):
 
-        self.display_opt = tk.StringVar(value="Sin")
-        self.sin_radio = tk.Radiobutton(root, text="Sin", variable=self.display_opt, value="Sin")
-        self.cos_radio = tk.Radiobutton(root, text="Cos", variable=self.display_opt, value="Cos")
+        self.gen_display_opt = tk.StringVar(value="Sin")
+        self.sin_radio = tk.Radiobutton(root, text="Sin", variable=self.gen_display_opt, value="Sin")
+        self.cos_radio = tk.Radiobutton(root, text="Cos", variable=self.gen_display_opt, value="Cos")
         self.sin_radio.pack()
         self.cos_radio.pack()
         
@@ -671,10 +671,10 @@ class DSPApp:
         self.frequency_txb.insert(0, "5")
 
         self.fs_lbl = tk.Label(root, text="Sampling Frequency")
-        self.fs_txb = tk.Entry(root)
+        self.gen_fs_txb = tk.Entry(root)
         self.fs_lbl.pack()
-        self.fs_txb.pack()
-        self.fs_txb.insert(0, "10")
+        self.gen_fs_txb.pack()
+        self.gen_fs_txb.insert(0, "10")
 
         self.cont_btn = tk.Button(root, text="Display Continious", command=self.display_cont)
         self.disc_btn = tk.Button(root, text="Display Discrete", command=self.display_disc)

@@ -1,11 +1,12 @@
 import numpy as np
+from tkinter import messagebox
 
 def generate_signal(self):
     # amplitude * cos(2*pi*F*t + phase shift)
     amp = float(self.amplitude_txb.get())
     phase_shift = float(self.phase_shift_txb.get())
     freq = float(self.frequency_txb.get())
-    fs = float(self.fs_txb.get())
+    fs = float(self.gen_fs_txb.get())
 
     t = np.linspace(0, 1, 1000)
 
@@ -16,14 +17,16 @@ def generate_signal(self):
     if fs < 2*freq:
         messagebox.showerror(message="fs < f, this will cause aliasing")
 
-    if self.display_opt.get() == "Sin":
+    if self.gen_display_opt.get() == "Sin":
         print("Sin")
         signal = amp * np.sin(2*np.pi*freq*t + phase_shift)
         signal_disc = amp * np.sin(2 * np.pi * freq * (n/fs) + phase_shift)
-    elif self.display_opt.get() == "Cos":
+    elif self.gen_display_opt.get() == "Cos":
         print("Cos")
         signal = amp * np.cos(2*np.pi*freq*t + phase_shift)
         signal_disc = amp * np.cos(2 * np.pi * freq * (n/fs) + phase_shift)
+    else:
+        messagebox.showerror(message="You didn't choose sin or cos")
 
     print('signal:', signal)
     print('time:', t)
