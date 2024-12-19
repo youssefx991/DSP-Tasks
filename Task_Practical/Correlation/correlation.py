@@ -34,7 +34,7 @@ def perform_corr(samples_one, samples_two):
 def time_delay(gui):
     indices = gui.current_indices_result
     samples = gui.current_samples_result
-    fs = int(gui.fs_txb.get())
+    fs = int(gui.corr_fs_txb.get())
     gui.time_delay = get_time_delay(samples, fs)
     gui.signal_time_delay.delete('1.0', 'end')  # Clear the previous content
     gui.signal_time_delay.insert('1.0', f"Time Delay: {gui.time_delay} seconds")
