@@ -1,4 +1,5 @@
 from Task_Practical.Correlation.Correlation_Task_Files.Point1_Correlation.CompareSignal import *
+import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 
 def correlation(gui):
@@ -8,10 +9,22 @@ def correlation(gui):
     result_samples = perform_corr(samples_one, samples_two)
     
     gui.current_indices_result, gui.current_samples_result = gui.current_indices_one, result_samples
-    gui.display_signal_result_text(gui.current_indices_result, gui.current_samples_result, 1)
-    Compare_Signals("CorrOutput.txt", gui.current_indices_result, gui.current_samples_result)
+    
+    gui.corr_signal_result_display_text.delete(1.0, tk.END)
+    gui.corr_signal_result_display_text.insert(tk.END, f"Indices: {gui.current_indices_result}\nSamples: {gui.current_samples_result}\n")
+    
     
     time_delay(gui)
+    
+    up_signals = ["up1.txt", "up2.txt", "up3.txt", "up4.txt", "up5.txt"]
+    down_signals = ["down1.txt", "down2.txt", "down3.txt", "down4.txt", "down5.txt"]
+    
+    result_class = get_signal_class(gui.current_indices_result, gui.current_samples_result, up_signals, down_signals)
+    
+    gui.signal_signal_class.delete('1.0', 'end')  # Clear the previous content
+    gui.signal_signal_class.insert('1.0', result_class)
+    
+    Compare_Signals("CorrOutput.txt", gui.current_indices_result, gui.current_samples_result)
 
 def perform_corr(samples_one, samples_two):
     n = len(samples_one)
@@ -58,6 +71,13 @@ def signal_class(gui):
     
     up_signals = ["up1.txt", "up2.txt", "up3.txt", "up4.txt", "up5.txt"]
     down_signals = ["down1.txt", "down2.txt", "down3.txt", "down4.txt", "down5.txt"]
+    
+    result_class = get_signal_class(indices, samples, up_signals, down_signals)
+    
+    gui.signal_signal_class.delete('1.0', 'end')  # Clear the previous content
+    gui.signal_signal_class.insert('1.0', result_class)
+    
+def get_signal_class(indices, samples, up_signals, down_signals):
     up_maxs = []
     down_maxs = []
     up_avg = 0
@@ -75,13 +95,10 @@ def signal_class(gui):
     down_avg = sum(down_maxs) / len(down_maxs)
     
     if down_avg >= up_avg:
-        gui.signal_signal_class.delete('1.0', 'end')  # Clear the previous content
-        gui.signal_signal_class.insert('1.0', f"Class 1 (A) - Down")
+        return "Class 1 (A) - Down"
     else:
-        gui.signal_signal_class.delete('1.0', 'end')  # Clear the previous content
-        gui.signal_signal_class.insert('1.0', f"Class 2 (B) - Up")
-    
-
+        return "Class 2 (B) - Up"
+        
 def read_lines(file_name):
     indices = []
     samples = []

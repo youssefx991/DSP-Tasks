@@ -244,8 +244,8 @@ class DSPApp:
 
         # Text widget for displaying the signal result text
         tk.Label(root, text="Result Signal").pack()
-        self.signal_result_display_text = tk.Text(root, height=3, width=75)
-        self.signal_result_display_text.pack()
+        self.corr_signal_result_display_text = tk.Text(root, height=3, width=75)
+        self.corr_signal_result_display_text.pack()
         
         # Text widget for displaying the Time Delay text
         tk.Label(root, text="Time Delay").pack()
@@ -260,8 +260,8 @@ class DSPApp:
         # Correlation Button
         tk.Button(root, text="Perform Correlation", command=lambda: correlation(self)).pack()
         
-        # Time Delay Button
-        tk.Button(root, text="Calculate Time Delay", command=lambda: time_delay(self)).pack()
+        # # Time Delay Button
+        # tk.Button(root, text="Calculate Time Delay", command=lambda: time_delay(self)).pack()
         
         # Class Button
         tk.Button(root, text="Determine_class", command=lambda: signal_class(self)).pack()
