@@ -228,6 +228,8 @@ def create_filter(gui):
         
         print("==========================================")
     else:
+        gui.current_indices_result, gui.current_samples_result = indices, samples
+        gui.display_signal_result_text(gui.current_indices_result, gui.current_samples_result)
         print("==========================================")
         print("Testing Result Filter")
         Compare_Signals(test_file, indices, samples)
