@@ -21,7 +21,6 @@ def create_filter(gui):
     gui.filter_type = filter_type
     
     norm_transition_width = transition_width / fs
-    print("norm_transition_width = ", norm_transition_width)
     
     if step_attenution <= 21: # rectangular: 0.9/N
         N = 0.9 / norm_transition_width
@@ -42,51 +41,30 @@ def create_filter(gui):
     if N % 2 == 0:
         N += 1
     
-    print("N = ", N)
     N_start = int(-1 * ((N-1) / 2))
     N_end = int(((N-1) / 2))
     h = []
-    print("fc = ", fc)
-    print("transition_width = ", transition_width)
-    print("fs = ", fs)
     
     if filter_type == "low_pass":
         fc_norm = (fc + (transition_width/2))/fs
-        print("fc_norm = ", fc_norm)
     elif filter_type == "high_pass":
         fc_norm = (fc - (transition_width/2))/fs
-        print("fc_norm = ", fc_norm)
     elif filter_type == "band_pass":
         fc1_norm = (fc1 - (transition_width/2))/fs
         fc2_norm = (fc2 + (transition_width/2))/fs
-        print("fc1_norm = ", fc1_norm)
-        print("fc2_norm = ", fc2_norm)
     elif filter_type == "band_stop":
         fc1_norm = (fc1 + (transition_width/2))/fs
         fc2_norm = (fc2 - (transition_width/2))/fs
-        print("fc1_norm = ", fc1_norm)
-        print("fc2_norm = ", fc2_norm)
         
-    
-    
     for n in range(N_end+1):
         if filter_type == "low_pass":
             if n == 0:
-                h.append(2 * fc_norm)  # Sinc at zero
-                print("n = ", n)
-                print("value = ", 2 * fc_norm)
-                print("==========================================")
+                h.append(2 * fc_norm)
             else:
                 up = np.sin(n * 2 * np.pi * fc_norm)
                 down = np.pi * n
                 value = up/down
                 h.append(value)
-                print("low pass")
-                print("n = ", n)
-                print("up = ", up)
-                print("down = ", down)
-                print("value = ", value)
-                print("==========================================")
 
         elif filter_type == "high_pass":
             if n == 0:
@@ -96,12 +74,6 @@ def create_filter(gui):
                 down = np.pi * n
                 value = up/down
                 h.append(value)
-                print("high pass")
-                print("n = ", n)
-                print("up = ", up)
-                print("down = ", down)
-                print("value = ", value)
-                print("==========================================")
 
         elif filter_type == "band_pass":
             if n == 0:
@@ -129,41 +101,23 @@ def create_filter(gui):
                 value = value1 - value2
                 h.append(value)
 
-        # else:
-        #     print("Invalid filter type")
-        #     return None
     
     
     # Apply the selected window
-    print("first h = ", h)
-    print("window_func = ", window_func)
     window = window_func(N_end+1)
-    print("window = ", window)
-    # h = [h[i] * window[i] for i in range(N_end+1)]
+    
     for i in range(N_end+1):
         h_val = h[i]
         w_val = window[i]
         product = h_val * w_val
-        print("i = ", i)
-        print("h[i] = ", h_val)
-        print("w[i] = ", w_val)
-        print("product =  ", product)
-        print("==========================================")
         
         h[i] = product
-
-    print("h = ", h)
-    
-    print("len of h = ", len(h))
-    
+        
     indices = list(range(N_start, N_end+1))
     samples = []
     for i in range(1, N_end+1):
         samples.append(h[-1 * i])
     samples = samples + h
-    
-    print("indices = ", indices)
-    print("samples = ", samples)
     
     if gui.current_indices_one and gui.current_samples_one:
         indices_one = gui.current_indices_one
@@ -191,12 +145,6 @@ def create_filter(gui):
         dft_real_one, dft_imaginary_one, dft_amplitude_one, dft_phase_one = perform_dft(indices_one, padded_samples_one)
         dft_real_two, dft_imaginary_two, dft_amplitude_two, dft_phase_two = perform_dft(indices_two, padded_samples_two)
         
-        # print("len of indices = ", len(indices_one))
-        # print("len of samples = ", len(samples_one))
-        # print("len of dft_real_one = ", len(dft_real_one))
-        # print("len of dft_imaginary_one = ", len(dft_imaginary_one))
-        # print("len of dft_real_two = ", len(dft_real_two))
-        # print("len of dft_imaginary_two = ", len(dft_imaginary_two))
         
         dft_real_result = []
         dft_imaginary_result = []
@@ -206,24 +154,21 @@ def create_filter(gui):
             dft_real_result.append(real_part)
             dft_imaginary_result.append(imaginary_part)
         
-        # print("len of dft_real_result = ", len(dft_real_result))
-        # print("len of dft_imaginary_result = ", len(dft_imaginary_result))
-        
         # Perform IDFT to get the result in the time domain
         result_indices, result_samples = perform_idft(dft_real_result, dft_imaginary_result)
         
         # Adjust result indices to reflect convolution start
-        result_indices = adjust_indices(len(samples_one), len(samples_two))
+        start_index = indices_one[0] + indices_two[0]
+        end_index = indices_one[len(indices_one) - 1] + indices_two[len(indices_two) -1]
+        result_indices = list(range(start_index, end_index + 1))
+        
         
         gui.current_indices_result, gui.current_samples_result = result_indices, result_samples
         gui.display_signal_result_text(gui.current_indices_result, gui.current_samples_result)
         
         print("==========================================")
         print("Testing Filtered Signal using Fourier")
-        # print("len of indices = ", len(result_indices))
-        # print("len of Samples = ", len(result_samples))
-        # print("Indices = ", result_indices)
-        # print("Samples = ", result_samples)
+        
         Compare_Signals(test_file, result_indices, result_samples)
         
         print("==========================================")
@@ -232,7 +177,9 @@ def create_filter(gui):
         gui.display_signal_result_text(gui.current_indices_result, gui.current_samples_result)
         print("==========================================")
         print("Testing Result Filter")
+        
         Compare_Signals(test_file, indices, samples)
+        
         print("==========================================")
         
         
@@ -275,8 +222,3 @@ def zero_pad(signal, target_length):
     padded_signal = signal + [0] * (target_length - len(signal))
     return padded_signal
 
-# Adjust indices for the result
-def adjust_indices(signal_length, filter_length):
-    start_index = -(filter_length // 2)
-    end_index = signal_length + filter_length - 2 - (filter_length // 2)
-    return list(range(start_index, end_index + 1))
