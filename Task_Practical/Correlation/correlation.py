@@ -37,9 +37,7 @@ def perform_corr(samples_one, samples_two):
             current_sum += samples_one[i] * samples_two[ (i+shift) % n ]
         result_samples.append(current_sum/n)
     
-    print("result_samples = ", result_samples)
     norm_factor = 1/n * (sum(x**2 for x in samples_one) * sum(x**2 for x in samples_two))**0.5
-    print("norm_fractor = ", norm_factor)
     result_samples = [x / norm_factor for x in result_samples]
     
     return result_samples
